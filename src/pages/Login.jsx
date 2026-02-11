@@ -100,12 +100,7 @@ const Login = () => {
         </p>
       </div>
 
-      <div className="card" style={{ marginTop: '1.5rem', background: 'var(--bg-light)' }}>
-        <p style={{ fontSize: '0.875rem', textAlign: 'center', marginBottom: '0.5rem', fontWeight: 600 }}>
-          Demo Credentials
-        </p>
-       
-      </div>
+      
     </div>
   );
 };
