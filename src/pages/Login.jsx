@@ -104,10 +104,7 @@ const Login = () => {
         <p style={{ fontSize: '0.875rem', textAlign: 'center', marginBottom: '0.5rem', fontWeight: 600 }}>
           Demo Credentials
         </p>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-light)' }}>
-          <strong>Admin:</strong> admin@campusshare.com / admin123<br />
-          <strong>Student:</strong> student@campusshare.com / student123
-        </p>
+       
       </div>
     </div>
   );
