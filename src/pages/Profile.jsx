@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
-import { FiUser, FiBook, FiLayers, FiMail, FiEdit2, FiSave, FiX } from 'react-icons/fi';
+import { 
+  FiUser, FiBook, FiLayers, FiMail, FiEdit2, FiSave, FiX,
+  FiPhone, FiHash, FiCalendar, FiHome, FiFileText, FiLinkedin, 
+  FiGithub, FiTwitter, FiEye, FiClock
+} from 'react-icons/fi';
 
 const Profile = () => {
   const { user, login } = useAuth();
@@ -12,11 +16,22 @@ const Profile = () => {
   const [editError, setEditError] = useState('');
   const [editSuccess, setEditSuccess] = useState('');
 
-  // Edit form state
+  // Edit form state with ALL fields
   const [editForm, setEditForm] = useState({
     name: '',
+    phone: '',
+    enrollmentId: '',
+    graduationYear: '',
+    college: '',
+    bio: '',
     branch: '',
-    semester: ''
+    semester: '',
+    socialLinks: {
+      linkedin: '',
+      github: '',
+      twitter: ''
+    },
+    profileVisibility: 'public'
   });
 
   // Initialize edit form with user data
@@ -24,8 +39,19 @@ const Profile = () => {
     if (user) {
       setEditForm({
         name: user.name || '',
+        phone: user.phone || '',
+        enrollmentId: user.enrollmentId || '',
+        graduationYear: user.graduationYear || '',
+        college: user.college || '',
+        bio: user.bio || '',
         branch: user.branch || '',
-        semester: user.semester || ''
+        semester: user.semester || '',
+        socialLinks: {
+          linkedin: user.socialLinks?.linkedin || '',
+          github: user.socialLinks?.github || '',
+          twitter: user.socialLinks?.twitter || ''
+        },
+        profileVisibility: user.profileVisibility || 'public'
       });
     }
   }, [user]);
@@ -57,10 +83,24 @@ const Profile = () => {
 
   // Handle edit form changes
   const handleEditChange = (e) => {
-    setEditForm({
-      ...editForm,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    // Handle nested socialLinks
+    if (name.startsWith('social.')) {
+      const socialField = name.split('.')[1];
+      setEditForm({
+        ...editForm,
+        socialLinks: {
+          ...editForm.socialLinks,
+          [socialField]: value
+        }
+      });
+    } else {
+      setEditForm({
+        ...editForm,
+        [name]: value
+      });
+    }
   };
 
   // Cancel edit
@@ -71,8 +111,19 @@ const Profile = () => {
     // Reset form to original user data
     setEditForm({
       name: user?.name || '',
+      phone: user?.phone || '',
+      enrollmentId: user?.enrollmentId || '',
+      graduationYear: user?.graduationYear || '',
+      college: user?.college || '',
+      bio: user?.bio || '',
       branch: user?.branch || '',
-      semester: user?.semester || ''
+      semester: user?.semester || '',
+      socialLinks: {
+        linkedin: user?.socialLinks?.linkedin || '',
+        github: user?.socialLinks?.github || '',
+        twitter: user?.socialLinks?.twitter || ''
+      },
+      profileVisibility: user?.profileVisibility || 'public'
     });
   };
 
@@ -83,7 +134,7 @@ const Profile = () => {
     setEditSuccess('');
 
     try {
-      // Validate inputs
+      // Validate required fields
       if (!editForm.name.trim()) {
         throw new Error('Name is required');
       }
@@ -98,7 +149,14 @@ const Profile = () => {
       const res = await api.put('/auth/profile', {
         name: editForm.name,
         branch: editForm.branch,
-        semester: parseInt(editForm.semester)
+        semester: parseInt(editForm.semester),
+        phone: editForm.phone,
+        enrollmentId: editForm.enrollmentId || undefined,
+        graduationYear: editForm.graduationYear ? parseInt(editForm.graduationYear) : null,
+        college: editForm.college,
+        bio: editForm.bio,
+        socialLinks: editForm.socialLinks,
+        profileVisibility: editForm.profileVisibility
       });
 
       // Update auth context with new user data
@@ -118,15 +176,32 @@ const Profile = () => {
 
   const branches = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'OTHER'];
   const semesters = [1, 2, 3, 4, 5, 6, 7, 8];
+  const graduationYears = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  const visibilityOptions = ['public', 'private', 'contacts'];
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
     <div className="container container-md" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
       {/* Header with Edit Button */}
       <div className="flex-between" style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2.5rem' }}>
-          <FiUser style={{ display: 'inline', marginRight: '0.5rem' }} />
-          My Profile
-        </h1>
+        <div>
+          <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>
+            <FiUser style={{ display: 'inline', marginRight: '0.5rem' }} />
+            My Profile
+          </h1>
+          <p style={{ color: 'var(--text-light)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <FiClock /> Last active: {formatDate(user?.lastActive)}
+          </p>
+        </div>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
@@ -174,116 +249,422 @@ const Profile = () => {
           )}
 
           {!isEditing ? (
-            /* VIEW MODE - Display user info */
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+            /* ========== VIEW MODE ========== */
+            <div className="grid" style={{ gap: '2rem' }}>
+              {/* Basic Info Section */}
               <div>
-                <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
-                  <FiUser style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Full Name
-                </p>
-                <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>{user?.name}</p>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+                  Basic Information
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiUser /> Full Name
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.name}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiMail /> Email
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.email}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiPhone /> Phone
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.phone || 'Not provided'}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiHash /> Enrollment ID
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.enrollmentId || 'Not provided'}</p>
+                  </div>
+                </div>
               </div>
 
+              {/* Academic Info Section */}
               <div>
-                <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
-                  <FiMail style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Email
-                </p>
-                <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>{user?.email}</p>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--secondary)' }}>
+                  Academic Information
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiBook /> Branch
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.branch}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiLayers /> Semester
+                    </p>
+                    <p style={{ fontWeight: 600 }}>Semester {user?.semester}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiCalendar /> Graduation Year
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.graduationYear || 'Not provided'}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiHome /> College
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{user?.college || 'Not provided'}</p>
+                  </div>
+                </div>
               </div>
 
+              {/* Bio Section */}
               <div>
-                <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
-                  <FiBook style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Branch
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--accent)' }}>
+                  <FiFileText /> About Me
+                </h3>
+                <p style={{ 
+                  background: 'var(--bg-light)', 
+                  padding: '1rem', 
+                  borderRadius: '4px',
+                  border: '2px solid var(--border)',
+                  color: user?.bio ? 'var(--text-dark)' : 'var(--text-light)',
+                  fontStyle: user?.bio ? 'normal' : 'italic'
+                }}>
+                  {user?.bio || 'No bio provided yet.'}
                 </p>
-                <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>{user?.branch}</p>
               </div>
 
+              {/* Social Links Section */}
               <div>
-                <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
-                  <FiLayers style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Semester
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--success)' }}>
+                  Social Links
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiLinkedin /> LinkedIn
+                    </p>
+                    {user?.socialLinks?.linkedin ? (
+                      <a 
+                        href={user.socialLinks.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}
+                      >
+                        Profile
+                      </a>
+                    ) : (
+                      <p style={{ color: 'var(--text-light)', fontStyle: 'italic' }}>Not provided</p>
+                    )}
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiGithub /> GitHub
+                    </p>
+                    {user?.socialLinks?.github ? (
+                      <a 
+                        href={user.socialLinks.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}
+                      >
+                        Profile
+                      </a>
+                    ) : (
+                      <p style={{ color: 'var(--text-light)', fontStyle: 'italic' }}>Not provided</p>
+                    )}
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      <FiTwitter /> Twitter
+                    </p>
+                    {user?.socialLinks?.twitter ? (
+                      <a 
+                        href={user.socialLinks.twitter} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}
+                      >
+                        Profile
+                      </a>
+                    ) : (
+                      <p style={{ color: 'var(--text-light)', fontStyle: 'italic' }}>Not provided</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Visibility */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--warning)' }}>
+                  <FiEye /> Profile Visibility
+                </h3>
+                <span className={`badge ${
+                  user?.profileVisibility === 'public' ? 'badge-success' : 
+                  user?.profileVisibility === 'private' ? 'badge-error' : 'badge-warning'
+                }`}>
+                  {user?.profileVisibility?.toUpperCase() || 'PUBLIC'}
+                </span>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginTop: '0.5rem' }}>
+                  {user?.profileVisibility === 'public' && 'Your profile is visible to everyone'}
+                  {user?.profileVisibility === 'private' && 'Your profile is only visible to you'}
+                  {user?.profileVisibility === 'contacts' && 'Your profile is visible to your contacts'}
                 </p>
-                <p style={{ fontWeight: 600, fontSize: '1.1rem' }}>Semester {user?.semester}</p>
+              </div>
+
+              {/* Account Info */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-light)' }}>
+                  Account Information
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      Member Since
+                    </p>
+                    <p style={{ fontWeight: 600 }}>{formatDate(user?.createdAt)}</p>
+                  </div>
+                  <div>
+                    <p style={{ color: 'var(--text-light)', marginBottom: '0.25rem', fontSize: '0.875rem' }}>
+                      Account Status
+                    </p>
+                    <span className="badge badge-success" style={{ textTransform: 'uppercase' }}>
+                      {user?.accountStatus || 'ACTIVE'}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
-            /* EDIT MODE - Form to edit user info */
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-              {/* Name Field */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FiUser style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="form-input"
-                  value={editForm.name}
-                  onChange={handleEditChange}
-                  placeholder="Enter your full name"
-                  required
-                />
+            /* ========== EDIT MODE ========== */
+            <div className="grid" style={{ gap: '2rem' }}>
+              {/* Basic Info Edit */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+                  Basic Information
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiUser /> Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="form-input"
+                      value={editForm.name}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiMail /> Email
+                    </label>
+                    <input
+                      type="email"
+                      className="form-input"
+                      value={user?.email || ''}
+                      disabled
+                      style={{ background: 'var(--bg-light)', cursor: 'not-allowed' }}
+                    />
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.25rem' }}>
+                      Email cannot be changed
+                    </p>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiPhone /> Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className="form-input"
+                      value={editForm.phone}
+                      onChange={handleEditChange}
+                      placeholder="e.g., +1 234 567 8900"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiHash /> Enrollment ID
+                    </label>
+                    <input
+                      type="text"
+                      name="enrollmentId"
+                      className="form-input"
+                      value={editForm.enrollmentId}
+                      onChange={handleEditChange}
+                      placeholder="e.g., 2021CSE001"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Email Field - READ ONLY */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FiMail style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-input"
-                  value={user?.email || ''}
-                  disabled
-                  style={{ background: 'var(--bg-light)', cursor: 'not-allowed' }}
-                />
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.25rem' }}>
-                  Email cannot be changed
-                </p>
+              {/* Academic Info Edit */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--secondary)' }}>
+                  Academic Information
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiBook /> Branch *
+                    </label>
+                    <select
+                      name="branch"
+                      className="form-select"
+                      value={editForm.branch}
+                      onChange={handleEditChange}
+                      required
+                    >
+                      <option value="">Select Branch</option>
+                      {branches.map(branch => (
+                        <option key={branch} value={branch}>{branch}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiLayers /> Semester *
+                    </label>
+                    <select
+                      name="semester"
+                      className="form-select"
+                      value={editForm.semester}
+                      onChange={handleEditChange}
+                      required
+                    >
+                      <option value="">Select Semester</option>
+                      {semesters.map(sem => (
+                        <option key={sem} value={sem}>Semester {sem}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiCalendar /> Graduation Year
+                    </label>
+                    <select
+                      name="graduationYear"
+                      className="form-select"
+                      value={editForm.graduationYear}
+                      onChange={handleEditChange}
+                    >
+                      <option value="">Select Year</option>
+                      {graduationYears.map(year => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiHome /> College/University
+                    </label>
+                    <input
+                      type="text"
+                      name="college"
+                      className="form-input"
+                      value={editForm.college}
+                      onChange={handleEditChange}
+                      placeholder="e.g., University Name"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Branch Field */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FiBook style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Branch *
-                </label>
-                <select
-                  name="branch"
-                  className="form-select"
-                  value={editForm.branch}
-                  onChange={handleEditChange}
-                  required
-                >
-                  <option value="">Select Branch</option>
-                  {branches.map(branch => (
-                    <option key={branch} value={branch}>{branch}</option>
-                  ))}
-                </select>
+              {/* Bio Edit */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--accent)' }}>
+                  <FiFileText /> About Me
+                </h3>
+                <div className="form-group">
+                  <textarea
+                    name="bio"
+                    className="form-textarea"
+                    value={editForm.bio}
+                    onChange={handleEditChange}
+                    placeholder="Tell us about yourself, your interests, skills, etc. (max 500 characters)"
+                    maxLength={500}
+                  />
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-light)', textAlign: 'right' }}>
+                    {editForm.bio.length}/500 characters
+                  </p>
+                </div>
               </div>
 
-              {/* Semester Field */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FiLayers style={{ display: 'inline', marginRight: '0.3rem' }} />
-                  Semester *
-                </label>
-                <select
-                  name="semester"
-                  className="form-select"
-                  value={editForm.semester}
-                  onChange={handleEditChange}
-                  required
-                >
-                  <option value="">Select Semester</option>
-                  {semesters.map(sem => (
-                    <option key={sem} value={sem}>Semester {sem}</option>
-                  ))}
-                </select>
+              {/* Social Links Edit */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--success)' }}>
+                  Social Links
+                </h3>
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiLinkedin /> LinkedIn Profile URL
+                    </label>
+                    <input
+                      type="url"
+                      name="social.linkedin"
+                      className="form-input"
+                      value={editForm.socialLinks.linkedin}
+                      onChange={handleEditChange}
+                      placeholder="https://linkedin.com/in/username"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiGithub /> GitHub Profile URL
+                    </label>
+                    <input
+                      type="url"
+                      name="social.github"
+                      className="form-input"
+                      value={editForm.socialLinks.github}
+                      onChange={handleEditChange}
+                      placeholder="https://github.com/username"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <FiTwitter /> Twitter Profile URL
+                    </label>
+                    <input
+                      type="url"
+                      name="social.twitter"
+                      className="form-input"
+                      value={editForm.socialLinks.twitter}
+                      onChange={handleEditChange}
+                      placeholder="https://twitter.com/username"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Visibility Edit */}
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--warning)' }}>
+                  <FiEye /> Profile Visibility
+                </h3>
+                <div className="form-group">
+                  <select
+                    name="profileVisibility"
+                    className="form-select"
+                    value={editForm.profileVisibility}
+                    onChange={handleEditChange}
+                  >
+                    {visibilityOptions.map(option => (
+                      <option key={option} value={option}>
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-light)', marginTop: '0.5rem' }}>
+                    <strong>Public:</strong> Visible to everyone<br />
+                    <strong>Private:</strong> Only visible to you<br />
+                    <strong>Contacts:</strong> Visible to your contacts
+                  </p>
+                </div>
               </div>
             </div>
           )}
