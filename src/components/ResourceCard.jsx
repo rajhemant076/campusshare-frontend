@@ -14,15 +14,18 @@ const ResourceCard = ({ resource, onUpdate }) => {
   );
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
 
-  // 🔥 FIXED: Use the API base URL to construct the file URL
+  // 🔥 FIXED: Get the FULL backend URL
   const getFileUrl = () => {
-    // If resource.fileUrl is already a full URL, use it
-    if (resource.fileUrl?.startsWith('http')) {
-      return resource.fileUrl;
+    // Get the base API URL from environment
+    const baseURL = import.meta.env.VITE_API_URL;
+    
+    // In production, use the full Render URL
+    if (import.meta.env.PROD) {
+      return `https://campusshare-backend.onrender.com/api/files/${resource.fileId}`;
     }
-    // Otherwise, construct the URL using the API base
-    const baseURL = import.meta.env.VITE_API_URL || '/api';
-    return `${baseURL}/files/${resource.fileId}`;
+    
+    // In development, use localhost
+    return `http://localhost:5000/api/files/${resource.fileId}`;
   };
 
   const handleLike = async (e) => {
@@ -64,20 +67,32 @@ const ResourceCard = ({ resource, onUpdate }) => {
   const handleViewPdf = (e) => {
     e.stopPropagation();
     const url = getFileUrl();
-    // Open in new tab for viewing
+    console.log('Opening PDF URL:', url); // Debug log
     window.open(url, '_blank');
   };
 
   const handleDownloadPdf = (e) => {
     e.stopPropagation();
     const url = getFileUrl();
-    // Create a link and trigger download
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = resource.fileName || 'document.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    console.log('Downloading PDF URL:', url); // Debug log
+    
+    // For download, we need to fetch the file first
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = resource.fileName || 'document.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch(error => {
+        console.error('Download error:', error);
+        alert('Failed to download file. Please try again.');
+      });
   };
 
   const getTypeColor = (type) => {

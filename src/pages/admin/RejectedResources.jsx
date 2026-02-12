@@ -23,6 +23,16 @@ const RejectedResources = () => {
     }
   };
 
+  // 🔥 FIXED: Get full URL for PDF files
+  const getFileUrl = (fileId) => {
+    // Production - use Render backend URL
+    if (import.meta.env.PROD) {
+      return `https://campusshare-backend.onrender.com/api/files/${fileId}`;
+    }
+    // Development - use localhost
+    return `http://localhost:5000/api/files/${fileId}`;
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this rejected resource permanently?")) return;
 
@@ -118,7 +128,7 @@ const RejectedResources = () => {
                 <div className="card-footer">
                   <div className="flex gap-1">
                     <a
-                      href={resource.fileUrl}
+                      href={getFileUrl(resource.fileId)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-sm btn-outline"
@@ -126,7 +136,7 @@ const RejectedResources = () => {
                       <FiEye /> View
                     </a>
                     <a
-                      href={resource.fileUrl}
+                      href={getFileUrl(resource.fileId)}
                       download
                       className="btn btn-sm btn-outline"
                     >

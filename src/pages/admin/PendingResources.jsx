@@ -24,6 +24,16 @@ const PendingResources = () => {
     }
   };
 
+  // 🔥 FIXED: Get full URL for PDF files
+  const getFileUrl = (fileId) => {
+    // Production - use Render backend URL
+    if (import.meta.env.PROD) {
+      return `https://campusshare-backend.onrender.com/api/files/${fileId}`;
+    }
+    // Development - use localhost
+    return `http://localhost:5000/api/files/${fileId}`;
+  };
+
   const handleApprove = async (id) => {
     setActionLoading(id);
     try {
@@ -151,7 +161,7 @@ const PendingResources = () => {
                 >
                   <div className="flex gap-1">
                     <a
-                      href={resource.fileUrl}
+                      href={getFileUrl(resource.fileId)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-sm btn-outline flex-1"
@@ -159,7 +169,7 @@ const PendingResources = () => {
                       <FiEye /> Preview
                     </a>
                     <a
-                      href={resource.fileUrl}
+                      href={getFileUrl(resource.fileId)}
                       download
                       className="btn btn-sm btn-outline flex-1"
                     >
