@@ -30,28 +30,16 @@ api.interceptors.request.use((config) => {
     delete config.headers['Content-Type'];
   }
   
-  console.log(`🚀 API Request: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`);
   return config;
 });
 
 api.interceptors.response.use(
-  (response) => {
-    console.log(`✅ API Response: ${response.status} ${response.config.url}`);
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.error(`❌ API Error:`, {
-      url: error.config?.url,
-      method: error.config?.method,
-      status: error.response?.status,
-      message: error.response?.data?.message || error.message
-    });
-
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = '/login';
     }
-    
     return Promise.reject(error);
   }
 );

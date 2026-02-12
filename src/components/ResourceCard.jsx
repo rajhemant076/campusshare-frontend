@@ -14,17 +14,13 @@ const ResourceCard = ({ resource, onUpdate }) => {
   );
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
 
-  // 🔥 FIXED: Get the FULL backend URL
+  // 🔥 CRITICAL FIX: Get the FULL backend URL for PDF files
   const getFileUrl = () => {
-    // Get the base API URL from environment
-    const baseURL = import.meta.env.VITE_API_URL;
-    
-    // In production, use the full Render URL
+    // Production - use Render backend URL
     if (import.meta.env.PROD) {
       return `https://campusshare-backend.onrender.com/api/files/${resource.fileId}`;
     }
-    
-    // In development, use localhost
+    // Development - use localhost
     return `http://localhost:5000/api/files/${resource.fileId}`;
   };
 
@@ -67,14 +63,12 @@ const ResourceCard = ({ resource, onUpdate }) => {
   const handleViewPdf = (e) => {
     e.stopPropagation();
     const url = getFileUrl();
-    console.log('Opening PDF URL:', url); // Debug log
     window.open(url, '_blank');
   };
 
   const handleDownloadPdf = (e) => {
     e.stopPropagation();
     const url = getFileUrl();
-    console.log('Downloading PDF URL:', url); // Debug log
     
     // For download, we need to fetch the file first
     fetch(url)
