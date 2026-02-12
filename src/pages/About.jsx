@@ -15,19 +15,25 @@ import {
   FiTrendingUp,
   FiDownload,
   FiUpload,
-  FiDatabase
+  FiDatabase,
+  FiLayers,
+  FiKey,
+  FiCode,
+  FiCheckCircle,
 } from "react-icons/fi";
 
-import { FaGithub, FaTwitter, FaLinkedin, FaReact, FaNodeJs, FaJs } from "react-icons/fa";
-
-import { SiExpress, SiJwt, SiTailwindcss, SiRedux } from "react-icons/si";
+import {
+  FaGithub,
+  FaTwitter,
+  FaLinkedin,
+  FaReact,
+  FaNodeJs,
+  FaJs,
+} from "react-icons/fa";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import api from "../api/api";
-
-
-
 
 /* ------------------ Stat Card ------------------ */
 const StatCard = ({ stat, index, loading }) => {
@@ -76,7 +82,9 @@ const ValueCard = ({ value, index }) => {
         {value.icon}
       </div>
 
-      <h3 className="text-xl font-semibold text-gray-900 mb-3">{value.title}</h3>
+      <h3 className="text-xl font-semibold text-gray-900 mb-3">
+        {value.title}
+      </h3>
       <p className="text-gray-600">{value.description}</p>
     </motion.div>
   );
@@ -109,7 +117,9 @@ const TeamCard = ({ member, index }) => {
       </div>
 
       <div className="p-6">
-        <p className="text-sm text-purple-600 font-semibold mb-2">{member.department}</p>
+        <p className="text-sm text-purple-600 font-semibold mb-2">
+          {member.department}
+        </p>
         <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
 
         <div className="flex gap-3">
@@ -164,7 +174,9 @@ const MilestoneCard = ({ milestone, index }) => {
           <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
             {milestone.icon}
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">{milestone.title}</h3>
+          <h3 className="text-xl font-semibold text-gray-900">
+            {milestone.title}
+          </h3>
         </div>
         <p className="text-gray-600">{milestone.description}</p>
       </div>
@@ -246,7 +258,7 @@ const About = () => {
     {
       year: "2026",
       title: "Today",
-      description: `Now serving ${(stats.totalUsers || 0).toLocaleString()}+ students with ${(stats.totalResources || 0).toLocaleString()}+ resources. Building the largest student-driven academic library.`,
+      description: `Now serving ${(stats.totalUsers || 0).toLocaleString()}+ students with ${(stats.totalResources || 0).toLocaleString()}+ resources.`,
       icon: <FiGlobe className="w-6 h-6" />,
     },
   ];
@@ -308,7 +320,7 @@ const About = () => {
       name: "Emily Zhang",
       role: "UX/UI Designer",
       department: "Design",
-      bio: "Creates intuitive and accessible user experiences. Winner of multiple design awards.",
+      bio: "Creates intuitive and accessible user experiences.",
       image:
         "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=500&q=80",
       social: {
@@ -337,42 +349,42 @@ const About = () => {
       icon: <FiHeart className="w-8 h-8" />,
       title: "Student First",
       description:
-        "Every decision we make is driven by what's best for students. Your success is our success.",
+        "Every decision we make is driven by what's best for students.",
       color: "from-red-500 to-pink-500",
     },
     {
       icon: <FiShield className="w-8 h-8" />,
       title: "Quality Assured",
       description:
-        "All resources go through rigorous review process to ensure accuracy and relevance.",
+        "All resources go through review process to ensure quality.",
       color: "from-blue-500 to-cyan-500",
     },
     {
       icon: <FiUsers className="w-8 h-8" />,
       title: "Community Driven",
       description:
-        "Built by students, for students. We grow and learn together as a community.",
+        "Built by students, for students. We grow and learn together.",
       color: "from-purple-500 to-indigo-500",
     },
     {
       icon: <FiAward className="w-8 h-8" />,
       title: "Excellence",
       description:
-        "We strive for excellence in everything we do, from code quality to user experience.",
+        "We strive for excellence in everything we do.",
       color: "from-yellow-500 to-orange-500",
     },
     {
       icon: <FiTarget className="w-8 h-8" />,
       title: "Accessibility",
       description:
-        "Free and equal access to quality educational resources for every student.",
+        "Free and equal access to educational resources.",
       color: "from-green-500 to-emerald-500",
     },
     {
       icon: <FiGlobe className="w-8 h-8" />,
       title: "Innovation",
       description:
-        "Constantly evolving with new technologies and features to serve you better.",
+        "Constantly evolving with new technologies and features.",
       color: "from-teal-500 to-cyan-500",
     },
   ];
@@ -381,11 +393,11 @@ const About = () => {
     { name: "React", icon: <FaReact className="w-8 h-8" />, color: "text-blue-400" },
     { name: "Node.js", icon: <FaNodeJs className="w-8 h-8" />, color: "text-green-600" },
     { name: "MongoDB", icon: <FiDatabase className="w-8 h-8" />, color: "text-green-500" },
-    { name: "Express", icon: <SiExpress className="w-8 h-8" />, color: "text-gray-300" },
+    { name: "Express", icon: <FiLayers className="w-8 h-8" />, color: "text-gray-300" },
     { name: "JavaScript", icon: <FaJs className="w-8 h-8" />, color: "text-yellow-400" },
-    { name: "JWT", icon: <SiJwt className="w-8 h-8" />, color: "text-purple-400" },
-    { name: "TailwindCSS", icon: <SiTailwindcss className="w-8 h-8" />, color: "text-cyan-400" },
-    { name: "Redux", icon: <SiRedux className="w-8 h-8" />, color: "text-purple-300" },
+    { name: "JWT", icon: <FiKey className="w-8 h-8" />, color: "text-purple-400" },
+    { name: "TailwindCSS", icon: <FiCode className="w-8 h-8" />, color: "text-cyan-400" },
+    { name: "Redux", icon: <FiCheckCircle className="w-8 h-8" />, color: "text-purple-300" },
   ];
 
   const achievements = [
@@ -402,7 +414,6 @@ const About = () => {
       {/* Hero */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
-        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cdefs%3E%3Cpattern id=%22grid%22 width=%2260%22 height=%2260%22 patternUnits=%22userSpaceOnUse%22%3E%3Cpath d=%22M 60 0 L 0 0 0 60%22 fill=%22none%22 stroke=%22rgba(255,255,255,0.2)%22 stroke-width=%221%22/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22url(%23grid)%22 /%3E%3C/svg%3E')]"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -420,18 +431,16 @@ const About = () => {
 
             <p className="text-xl md:text-2xl mb-8 text-gray-100">
               Empowering students to share knowledge, collaborate, and succeed together.
-              We're on a mission to make quality education accessible to everyone.
             </p>
           </motion.div>
         </div>
 
-        {/* Wave */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
             <path
               fill="white"
               fillOpacity="1"
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L0,320Z"
             ></path>
           </svg>
         </div>
@@ -439,27 +448,23 @@ const About = () => {
 
       {/* Mission */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-600 px-4 py-2 rounded-full mb-6">
-                <FiTarget className="w-4 h-4" />
-                <span className="text-sm font-medium">Our Mission</span>
-              </div>
-
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Making Education Accessible to{" "}
-                <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  Every Student
-                </span>
-              </h2>
-
-              <p className="text-xl text-gray-600 leading-relaxed">
-                CampusShare was founded on the belief that every student deserves access to quality educational resources.
-                We're building a community where knowledge flows freely and students help students succeed.
-              </p>
-            </motion.div>
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-600 px-4 py-2 rounded-full mb-6">
+            <FiTarget className="w-4 h-4" />
+            <span className="text-sm font-medium">Our Mission</span>
           </div>
+
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Making Education Accessible to{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              Every Student
+            </span>
+          </h2>
+
+          <p className="text-xl text-gray-600 leading-relaxed">
+            CampusShare is built on the belief that every student deserves access to quality resources.
+            We are building a student-driven community for learning and sharing.
+          </p>
         </div>
       </section>
 
@@ -477,12 +482,7 @@ const About = () => {
       {/* Journey */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Our{" "}
               <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
@@ -492,7 +492,7 @@ const About = () => {
             <p className="text-xl text-gray-600">
               From a simple idea to a thriving community of learners.
             </p>
-          </motion.div>
+          </div>
 
           <div className="max-w-3xl mx-auto space-y-6">
             {milestones.map((milestone, index) => (
@@ -505,12 +505,7 @@ const About = () => {
       {/* Values */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               What We{" "}
               <span className="bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
@@ -518,7 +513,7 @@ const About = () => {
               </span>
             </h2>
             <p className="text-xl text-gray-600">Our core values guide everything we do.</p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
@@ -531,12 +526,7 @@ const About = () => {
       {/* Team */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Meet the{" "}
               <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
@@ -546,7 +536,7 @@ const About = () => {
             <p className="text-xl text-gray-600">
               Passionate educators, developers, and students working together.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
@@ -559,12 +549,7 @@ const About = () => {
       {/* Tech Stack */}
       <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Built with{" "}
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
@@ -572,9 +557,9 @@ const About = () => {
               </span>
             </h2>
             <p className="text-xl text-gray-300">
-              Powered by the MERN stack and industry-best practices.
+              Powered by MERN stack and industry best practices.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
             {techStack.map((tech, index) => (
@@ -593,42 +578,24 @@ const About = () => {
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-center mt-12"
-          >
+          <div className="text-center mt-12">
             <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
               <FaGithub className="w-5 h-5" />
               <span className="text-sm">Open source and community driven</span>
-              <a
-                href="https://github.com/campusshare"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-purple-400 hover:text-purple-300 font-semibold"
-              >
-                Star us on GitHub →
-              </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-purple-600 to-indigo-600">
         <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto"
-          >
+          <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Be Part of Our Story
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              Join {(stats.totalUsers || 0).toLocaleString()}+ students who are already sharing, learning, and growing together.
+              Join {(stats.totalUsers || 0).toLocaleString()}+ students who are already sharing and learning together.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -639,7 +606,7 @@ const About = () => {
                 Explore Resources
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
