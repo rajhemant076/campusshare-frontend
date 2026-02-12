@@ -45,7 +45,9 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
 }
 
-/* Navbar Styles */
+/* ===================================== */
+/* NAVBAR STYLES - Desktop First */
+/* ===================================== */
 .navbar {
   background: white;
   border-bottom: 4px solid var(--text-dark);
@@ -112,7 +114,25 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--primary);
 }
 
-/* Button Styles */
+/* Hamburger Button - Hidden on Desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: 2px solid var(--text-dark);
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-dark);
+  transition: all 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: var(--text-dark);
+  color: white;
+}
+
+/* ===================================== */
+/* BUTTON STYLES */
+/* ===================================== */
 .btn {
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
@@ -176,7 +196,9 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-/* Card Styles */
+/* ===================================== */
+/* CARD STYLES */
+/* ===================================== */
 .card {
   background: white;
   border: 3px solid var(--text-dark);
@@ -213,7 +235,9 @@ h1, h2, h3, h4, h5, h6 {
   border-top: 2px solid var(--border);
 }
 
-/* Form Styles */
+/* ===================================== */
+/* FORM STYLES */
+/* ===================================== */
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -249,7 +273,9 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100px;
 }
 
-/* Container Styles */
+/* ===================================== */
+/* CONTAINER & GRID STYLES */
+/* ===================================== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -264,7 +290,6 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 900px;
 }
 
-/* Grid Styles */
 .grid {
   display: grid;
   gap: 2rem;
@@ -278,7 +303,9 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
-/* Badge Styles */
+/* ===================================== */
+/* BADGE STYLES */
+/* ===================================== */
 .badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -312,7 +339,9 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-/* Alert Styles */
+/* ===================================== */
+/* ALERT STYLES */
+/* ===================================== */
 .alert {
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
@@ -341,7 +370,9 @@ h1, h2, h3, h4, h5, h6 {
   color: #1E40AF;
 }
 
-/* Loading Spinner */
+/* ===================================== */
+/* LOADING SPINNER */
+/* ===================================== */
 .spinner {
   border: 4px solid var(--border);
   border-top: 4px solid var(--primary);
@@ -357,7 +388,9 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: rotate(360deg); }
 }
 
-/* Filter Styles */
+/* ===================================== */
+/* FILTER STYLES */
+/* ===================================== */
 .filter-container {
   background: white;
   border: 3px solid var(--text-dark);
@@ -373,7 +406,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
-/* Stats Card */
+/* ===================================== */
+/* STATS CARD STYLES */
+/* ===================================== */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -406,7 +441,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0.5rem;
 }
 
-/* Empty State */
+/* ===================================== */
+/* EMPTY STATE STYLES */
+/* ===================================== */
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -428,32 +465,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1.5rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .navbar-links {
-    gap: 1rem;
-  }
-  
-  .container {
-    padding: 1rem;
-  }
-  
-  .grid-2,
-  .grid-3 {
-    grid-template-columns: 1fr;
-  }
-  
-  .card {
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
-  }
-  
-  .card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
-  }
-}
-
-/* Utility Classes */
+/* ===================================== */
+/* UTILITY CLASSES */
+/* ===================================== */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .mt-1 { margin-top: 0.5rem; }
@@ -469,3 +483,159 @@ h1, h2, h3, h4, h5, h6 {
 .gap-2 { gap: 1rem; }
 .w-full { width: 100%; }
 .flex-1 { flex: 1; }
+
+/* ===================================== */
+/* MOBILE RESPONSIVE STYLES - SINGLE MEDIA QUERY */
+/* ===================================== */
+@media (max-width: 768px) {
+  /* Navbar Mobile Styles */
+  .navbar-container {
+    flex-wrap: wrap;
+  }
+
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-links li a {
+    display: block;
+    padding: 0.5rem;
+  }
+
+  .navbar-links li a.btn,
+  .navbar-links li button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logout-item {
+    width: 100%;
+  }
+
+  .logout-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Container Mobile Styles */
+  .container {
+    padding: 1rem;
+  }
+
+  /* Grid Mobile Styles */
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Card Mobile Styles */
+  .card {
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+  }
+  
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+  }
+
+  /* Filter Grid Mobile */
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stats Grid Mobile */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================== */
+/* EXTRA SMALL DEVICES */
+/* ===================================== */
+@media (max-width: 480px) {
+  .navbar-logo span {
+    font-size: 1.5rem;
+  }
+
+  .container {
+    padding: 0.75rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .empty-state-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===================================== */
+/* ANIMATED MOBILE MENU (OPTIONAL) */
+/* ===================================== */
+@media (max-width: 768px) {
+  .navbar-links {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-links.active {
+    max-height: 500px;
+    opacity: 1;
+    padding: 1rem 0;
+  }
+
+  .navbar-links li {
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-links.active li {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Stagger animation for menu items */
+  .navbar-links.active li:nth-child(1) { transition-delay: 0.1s; }
+  .navbar-links.active li:nth-child(2) { transition-delay: 0.15s; }
+  .navbar-links.active li:nth-child(3) { transition-delay: 0.2s; }
+  .navbar-links.active li:nth-child(4) { transition-delay: 0.25s; }
+  .navbar-links.active li:nth-child(5) { transition-delay: 0.3s; }
+  .navbar-links.active li:nth-child(6) { transition-delay: 0.35s; }
+  .navbar-links.active li:nth-child(7) { transition-delay: 0.4s; }
+  .navbar-links.active li:nth-child(8) { transition-delay: 0.45s; }
+}
