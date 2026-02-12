@@ -19,11 +19,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"; // ❌ REMOVED Navbar import
 import api from "../api/api";
 
-/* ------------------ FeatureCard Component (Moved Outside for Performance) ------------------ */
+/* ------------------ FeatureCard Component ------------------ */
 const FeatureCard = ({ feature, index }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -132,35 +131,25 @@ const Features = () => {
     try {
       setStats((prev) => ({ ...prev, loading: true, error: null }));
 
-      // Admin Stats
-      const statsResponse = await api.get("/admin/stats");
+      const featuresResponse = await api.get("/features/stats");
 
-      if (statsResponse.data?.success) {
-        const { totalUsers, totalUploads, approvedResources } =
-          statsResponse.data.stats;
-
+      if (featuresResponse.data?.success) {
+        const { stats, recentResources, popularResources, branchStats } = featuresResponse.data.data;
+        
         setStats((prev) => ({
           ...prev,
-          totalUsers: totalUsers || 0,
-          totalResources: totalUploads || 0,
-          totalApproved: approvedResources || 0,
-          totalDownloads: Math.floor((totalUploads || 0) * 3.5),
+          totalUsers: stats.totalUsers || 0,
+          totalResources: stats.totalResources || 0,
+          totalApproved: stats.totalApproved || 0,
+          totalDownloads: stats.totalDownloads || Math.floor((stats.totalResources || 0) * 3.5),
+          totalBranches: stats.totalBranches || 7,
+          totalSemesters: stats.totalSemesters || 8,
           loading: false,
         }));
-      }
 
-      // Recent Resources
-      const resourcesResponse = await api.get("/resources?limit=6");
-      if (resourcesResponse.data?.success) {
-        setRecentResources(resourcesResponse.data.resources || []);
-      }
-
-      // Popular Resources
-      const popularResponse = await api.get(
-        "/resources?sort=likesCount&limit=6"
-      );
-      if (popularResponse.data?.success) {
-        setPopularResources(popularResponse.data.resources || []);
+        setRecentResources(recentResources || []);
+        setPopularResources(popularResources || []);
+        setBranchStats(branchStats || []);
       }
     } catch (error) {
       console.error("Error fetching real-time data:", error);
@@ -183,23 +172,7 @@ const Features = () => {
           loading: false,
           error: null,
         });
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRealTimeData();
-  }, [fetchRealTimeData]);
-
-  /* ------------------ Fetch Branch Stats ------------------ */
-  useEffect(() => {
-    const fetchBranchStats = async () => {
-      try {
-        const response = await api.get("/resources/stats/by-branch");
-        if (response.data?.success) {
-          setBranchStats(response.data.stats || []);
-        }
-      } catch (error) {
+        
         setBranchStats([
           { branch: "CSE", count: 450 },
           { branch: "ECE", count: 320 },
@@ -210,12 +183,14 @@ const Features = () => {
           { branch: "OTHER", count: 120 },
         ]);
       }
-    };
-
-    fetchBranchStats();
+    }
   }, []);
 
-  /* ------------------ Safe StatCards (FIXED toLocaleString crash) ------------------ */
+  useEffect(() => {
+    fetchRealTimeData();
+  }, [fetchRealTimeData]);
+
+  /* ------------------ Stat Cards ------------------ */
   const statCards = [
     {
       icon: <DocumentTextIcon className="w-8 h-8" />,
@@ -378,7 +353,6 @@ const Features = () => {
   if (stats.error) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navbar />
         <div className="pt-32 pb-20 text-center">
           <div className="text-red-600 mb-4">⚠️ {stats.error}</div>
           <button
@@ -396,8 +370,6 @@ const Features = () => {
   /* ------------------ Main UI ------------------ */
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navbar />
-
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-90"></div>
@@ -478,6 +450,7 @@ const Features = () => {
         </div>
       </section>
 
+      {/* Rest of your component remains the same... */}
       {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -523,17 +496,27 @@ const Features = () => {
             </h3>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-              {branchStats.map((branch, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-lg font-semibold text-gray-900">
-                    {branch.branch}
+              {branchStats.length > 0 ? (
+                branchStats.map((branch, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-lg font-semibold text-gray-900">
+                      {branch.branch || branch._id}
+                    </div>
+                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                      {branch.count}
+                    </div>
+                    <div className="text-xs text-gray-500">resources</div>
                   </div>
-                  <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                    {branch.count}
+                ))
+              ) : (
+                [1,2,3,4,5,6,7].map((i) => (
+                  <div key={i} className="text-center animate-pulse">
+                    <div className="h-6 bg-gray-200 rounded w-16 mx-auto mb-2"></div>
+                    <div className="h-8 bg-gray-200 rounded w-12 mx-auto mb-1"></div>
+                    <div className="h-4 bg-gray-200 rounded w-20 mx-auto"></div>
                   </div>
-                  <div className="text-xs text-gray-500">resources</div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>

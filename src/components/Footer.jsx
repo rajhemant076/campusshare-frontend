@@ -61,7 +61,7 @@ const Footer = () => {
                 <FiLinkedin />
               </a>
               <a 
-                href="https://www.instagram.com/hemant_raj1401?igsh=MThoMXR2ZTQxcmRieQ==" 
+                href="https://www.instagram.com/hemant_raj1401/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -141,7 +141,7 @@ const Footer = () => {
             <ul>
               <li>
                 <FiMapPin />
-                <span>123 Campus Share,Patna Bihar</span>
+                <span>123 Campus Share, Patna Bihar</span>
               </li>
               <li>
                 <FiPhone />

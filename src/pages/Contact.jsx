@@ -23,7 +23,7 @@ import {
   FaDiscord,
   FaInstagram,
 } from "react-icons/fa";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import api from "../api/api";
 
@@ -340,7 +340,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navbar />
+     
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
