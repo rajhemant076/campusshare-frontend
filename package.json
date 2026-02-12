@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "@sendgrid/mail": "^8.1.6",
     "axios": "^1.6.2",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.34.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

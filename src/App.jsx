@@ -12,14 +12,15 @@ import Upload from "./pages/Upload";
 import Profile from "./pages/Profile";
 import Bookmarks from "./pages/Bookmarks";
 import Features from "./pages/Features";
-import Contact from "./pages/Contact"; // ✅ ADDED: Contact page
-import About from "./pages/About";     // ✅ ADDED: About page
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PendingResources from "./pages/admin/PendingResources";
 import ApprovedResources from "./pages/admin/ApprovedResources";
 import RejectedResources from "./pages/admin/RejectedResources";
 import UserManagement from "./pages/admin/UserManagement";
+import ContactMessages from "./pages/admin/ContactMessages"; // ✅ NEW
 
 const App = () => {
   return (
@@ -31,8 +32,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/features" element={<Features />} />
-        <Route path="/contact" element={<Contact />} /> {/* ✅ ADDED: Contact route */}
-        <Route path="/about" element={<About />} />     {/* ✅ ADDED: About route */}
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
 
         {/* 🔐 STUDENT PROTECTED ROUTES */}
         <Route
@@ -98,6 +99,14 @@ const App = () => {
           element={
             <ProtectedRoute adminOnly={true}>
               <UserManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/contact-messages" // ✅ NEW
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <ContactMessages />
             </ProtectedRoute>
           }
         />
