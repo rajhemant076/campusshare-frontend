@@ -19,15 +19,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import Footer from "../components/Footer"; // ❌ REMOVED Navbar import
+import Footer from "../components/Footer";
 import api from "../api/api";
 
-/* ------------------ FeatureCard Component ------------------ */
 const FeatureCard = ({ feature, index }) => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
     <motion.div
@@ -35,10 +31,10 @@ const FeatureCard = ({ feature, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+      className="feature-card"
     >
       <div
-        className={`w-16 h-16 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center text-white mb-4`}
+        className={`feature-icon bg-gradient-to-r ${feature.color}`}
       >
         {feature.icon}
       </div>
@@ -63,7 +59,6 @@ const FeatureCard = ({ feature, index }) => {
   );
 };
 
-/* ------------------ ResourceCard Component ------------------ */
 const ResourceCard = ({ resource, index }) => {
   return (
     <motion.div
@@ -71,7 +66,7 @@ const ResourceCard = ({ resource, index }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
+      className="resource-card"
     >
       <div className="flex items-center gap-3 mb-3">
         <span className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-semibold">
@@ -126,7 +121,6 @@ const Features = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  /* ------------------ Fetch Real-time Data ------------------ */
   const fetchRealTimeData = useCallback(async () => {
     try {
       setStats((prev) => ({ ...prev, loading: true, error: null }));
@@ -160,7 +154,6 @@ const Features = () => {
         error: error.response?.data?.message || "Failed to fetch data",
       }));
 
-      // fallback for dev
       if (process.env.NODE_ENV === "development") {
         setStats({
           totalResources: 1234,
@@ -190,7 +183,6 @@ const Features = () => {
     fetchRealTimeData();
   }, [fetchRealTimeData]);
 
-  /* ------------------ Stat Cards ------------------ */
   const statCards = [
     {
       icon: <DocumentTextIcon className="w-8 h-8" />,
@@ -222,13 +214,11 @@ const Features = () => {
     },
   ];
 
-  /* ------------------ Features List ------------------ */
   const features = [
     {
       icon: <CloudArrowUpIcon className="w-8 h-8" />,
       title: "Easy File Upload",
-      description:
-        "Upload notes, assignments, PYQs, and lab manuals with just a few clicks. Support for PDF format up to 10MB.",
+      description: "Upload notes, assignments, PYQs, and lab manuals with just a few clicks. Support for PDF format up to 10MB.",
       color: "from-blue-500 to-cyan-500",
       stat: `${stats.totalResources || 0}+`,
       statLabel: "Total Resources",
@@ -236,8 +226,7 @@ const Features = () => {
     {
       icon: <MagnifyingGlassIcon className="w-8 h-8" />,
       title: "Smart Search",
-      description:
-        "Find resources by branch, semester, subject, or type. Advanced filters help you get exactly what you need.",
+      description: "Find resources by branch, semester, subject, or type. Advanced filters help you get exactly what you need.",
       color: "from-purple-500 to-pink-500",
       stat: `${stats.totalBranches} Branches`,
       statLabel: `${stats.totalSemesters} Semesters`,
@@ -245,8 +234,7 @@ const Features = () => {
     {
       icon: <DocumentCheckIcon className="w-8 h-8" />,
       title: "Admin Approval",
-      description:
-        "Quality control through admin review system. Only approved resources are visible to the community.",
+      description: "Quality control through admin review system. Only approved resources are visible to the community.",
       color: "from-green-500 to-emerald-500",
       stat: `${stats.totalApproved || 0}+`,
       statLabel: "Approved Resources",
@@ -254,22 +242,19 @@ const Features = () => {
     {
       icon: <BookmarkIcon className="w-8 h-8" />,
       title: "Bookmark Resources",
-      description:
-        "Save important resources for quick access later. Build your personal library of study materials.",
+      description: "Save important resources for quick access later. Build your personal library of study materials.",
       color: "from-yellow-500 to-orange-500",
     },
     {
       icon: <HeartIcon className="w-8 h-8" />,
       title: "Like & Engage",
-      description:
-        "Show appreciation for helpful resources. Popular resources rise to the top.",
+      description: "Show appreciation for helpful resources. Popular resources rise to the top.",
       color: "from-red-500 to-rose-500",
     },
     {
       icon: <UserGroupIcon className="w-8 h-8" />,
       title: "Student Community",
-      description:
-        "Connect with fellow students from different branches and semesters.",
+      description: "Connect with fellow students from different branches and semesters.",
       color: "from-indigo-500 to-blue-500",
       stat: `${stats.totalUsers || 0}+`,
       statLabel: "Active Students",
@@ -277,22 +262,19 @@ const Features = () => {
     {
       icon: <AcademicCapIcon className="w-8 h-8" />,
       title: "Branch Specific",
-      description:
-        "Resources organized by CSE, ECE, EEE, MECH, CIVIL, IT, and other branches.",
+      description: "Resources organized by CSE, ECE, EEE, MECH, CIVIL, IT, and other branches.",
       color: "from-teal-500 to-cyan-500",
     },
     {
       icon: <ClockIcon className="w-8 h-8" />,
       title: "Semester Wise",
-      description:
-        "Content categorized from semester 1 to 8, making it easy to find relevant material.",
+      description: "Content categorized from semester 1 to 8, making it easy to find relevant material.",
       color: "from-amber-500 to-yellow-500",
     },
     {
       icon: <ShieldCheckIcon className="w-8 h-8" />,
       title: "Secure Authentication",
-      description:
-        "JWT-based authentication with encrypted passwords. Your data stays safe.",
+      description: "JWT-based authentication with encrypted passwords. Your data stays safe.",
       color: "from-violet-500 to-purple-500",
     },
     {
@@ -310,8 +292,7 @@ const Features = () => {
     {
       icon: <CpuChipIcon className="w-8 h-8" />,
       title: "Modern Tech Stack",
-      description:
-        "Built with MERN stack, GridFS for file storage, and responsive design.",
+      description: "Built with MERN stack, GridFS for file storage, and responsive design.",
       color: "from-fuchsia-500 to-pink-500",
     },
   ];
@@ -349,7 +330,6 @@ const Features = () => {
     },
   ];
 
-  /* ------------------ Error UI ------------------ */
   if (stats.error) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -367,13 +347,11 @@ const Features = () => {
     );
   }
 
-  /* ------------------ Main UI ------------------ */
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-90"></div>
-        <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cdefs%3E%3Cpattern id=%22grid%22 width=%2260%22 height=%2260%22 patternUnits=%22userSpaceOnUse%22%3E%3Cpath d=%22M 60 0 L 0 0 0 60%22 fill=%22none%22 stroke=%22rgba(255,255,255,0.1)%22 stroke-width=%221%22/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22url(%23grid)%22 /%3E%3C/svg%3E')]"></div>
+        <div className="absolute inset-0 opacity-20 bg-grid-pattern"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -384,9 +362,7 @@ const Features = () => {
           >
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">
-                Live Data • Updated Real-time
-              </span>
+              <span className="text-sm font-medium">Live Data • Updated Real-time</span>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
@@ -404,10 +380,7 @@ const Features = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8">
               {statCards.map((stat, index) => (
-                <div
-                  key={index}
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-4"
-                >
+                <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                   <div className="text-2xl font-bold text-white mb-1">
                     {stats.loading ? (
                       <div className="h-8 w-20 bg-white/20 animate-pulse rounded mx-auto"></div>
@@ -416,42 +389,27 @@ const Features = () => {
                     )}
                   </div>
                   <div className="text-xs text-white/80">{stat.label}</div>
-                  <div className="text-xs mt-1 text-green-300">
-                    {stat.change}
-                  </div>
+                  <div className="text-xs mt-1 text-green-300">{stat.change}</div>
                 </div>
               ))}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-white text-purple-600 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
-                Get Started Free
-              </button>
-              <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
+              <button className="btn btn-primary">Get Started Free</button>
+              <button className="btn btn-outline border-2 border-white text-white hover:bg-white hover:text-purple-600">
                 Browse Resources
               </button>
             </div>
           </motion.div>
         </div>
 
-        {/* Wave */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 320"
-            className="w-full"
-          >
-            <path
-              fill="white"
-              fillOpacity="1"
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
+            <path fill="white" fillOpacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>
         </div>
       </section>
 
-      {/* Rest of your component remains the same... */}
-      {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -463,12 +421,9 @@ const Features = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center group"
               >
-                <div
-                  className={`w-20 h-20 mx-auto bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                >
+                <div className={`w-20 h-20 mx-auto bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   {stat.icon}
                 </div>
-
                 <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                   {stats.loading ? (
                     <div className="h-8 w-24 bg-gray-200 animate-pulse rounded mx-auto"></div>
@@ -476,25 +431,18 @@ const Features = () => {
                     stat.value
                   )}
                 </div>
-
                 <div className="text-gray-600 mb-1">{stat.label}</div>
-                <div className="text-sm text-green-600 font-medium">
-                  {stat.change}
-                </div>
+                <div className="text-sm text-green-600 font-medium">{stat.change}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Branch Distribution */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Resources by Branch
-            </h3>
-
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Resources by Branch</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
               {branchStats.length > 0 ? (
                 branchStats.map((branch, index) => (
@@ -522,7 +470,6 @@ const Features = () => {
         </div>
       </section>
 
-      {/* Features */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
@@ -537,9 +484,7 @@ const Features = () => {
                 Students & Admins
               </span>
             </h2>
-            <p className="text-xl text-gray-600">
-              Everything you need to succeed in your academic journey
-            </p>
+            <p className="text-xl text-gray-600">Everything you need to succeed in your academic journey</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -550,21 +495,14 @@ const Features = () => {
         </div>
       </section>
 
-      {/* Recent Resources */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                Recently Added
-              </h3>
-              <p className="text-gray-600">
-                Latest resources shared by students
-              </p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">Recently Added</h3>
+              <p className="text-gray-600">Latest resources shared by students</p>
             </div>
-            <button className="text-purple-600 hover:text-purple-700 font-semibold">
-              View All →
-            </button>
+            <button className="text-purple-600 hover:text-purple-700 font-semibold">View All →</button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -573,10 +511,7 @@ const Features = () => {
                   <ResourceCard key={index} resource={resource} index={index} />
                 ))
               : [1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="bg-gray-50 rounded-xl p-6 animate-pulse"
-                  >
+                  <div key={i} className="bg-gray-50 rounded-xl p-6 animate-pulse">
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
                     <div className="h-4 bg-gray-200 rounded w-2/3"></div>
@@ -586,17 +521,12 @@ const Features = () => {
         </div>
       </section>
 
-      {/* Popular Resources */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                Most Popular
-              </h3>
-              <p className="text-gray-600">
-                Most liked resources in CampusShare
-              </p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">Most Popular</h3>
+              <p className="text-gray-600">Most liked resources in CampusShare</p>
             </div>
           </div>
 
@@ -606,10 +536,7 @@ const Features = () => {
                   <ResourceCard key={index} resource={resource} index={index} />
                 ))
               : [1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="bg-white rounded-xl p-6 animate-pulse"
-                  >
+                  <div key={i} className="bg-white rounded-xl p-6 animate-pulse">
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
                     <div className="h-4 bg-gray-200 rounded w-2/3"></div>
@@ -619,7 +546,6 @@ const Features = () => {
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="py-20 bg-gradient-to-br from-purple-50 to-indigo-50">
         <div className="container mx-auto px-4">
           <motion.div
@@ -635,45 +561,27 @@ const Features = () => {
               </span>{" "}
               Works
             </h2>
-            <p className="text-xl text-gray-600">
-              Get started in just a few simple steps
-            </p>
+            <p className="text-xl text-gray-600">Get started in just a few simple steps</p>
           </motion.div>
 
           <div className="relative">
             <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-purple-200 via-indigo-200 to-purple-200"></div>
-
             <div className="space-y-12 relative">
               {howItWorks.map((item, index) => (
                 <motion.div
                   key={index}
-                  initial={{
-                    opacity: 0,
-                    x: index % 2 === 0 ? -50 : 50,
-                  }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className={`flex flex-col ${
-                    index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                  } items-center gap-8`}
+                  className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-8`}
                 >
                   <div className="lg:w-1/2">
-                    <div
-                      className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${
-                        index % 2 === 0 ? "lg:text-right" : "lg:text-left"
-                      }`}
-                    >
-                      <div
-                        className={`flex items-center gap-4 mb-4 ${
-                          index % 2 === 0 ? "lg:flex-row-reverse" : ""
-                        }`}
-                      >
+                    <div className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${index % 2 === 0 ? "lg:text-right" : "lg:text-left"}`}>
+                      <div className={`flex items-center gap-4 mb-4 ${index % 2 === 0 ? "lg:flex-row-reverse" : ""}`}>
                         <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                           {item.step}
                         </div>
-                        <h3 className="text-2xl font-semibold text-gray-900">
-                          {item.title}
-                        </h3>
+                        <h3 className="text-2xl font-semibold text-gray-900">{item.title}</h3>
                       </div>
                       <p className="text-gray-600 text-lg">{item.description}</p>
                     </div>
@@ -686,7 +594,6 @@ const Features = () => {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-20 bg-gradient-to-r from-purple-600 to-indigo-600">
         <div className="container mx-auto px-4 text-center">
           <motion.div
@@ -699,15 +606,13 @@ const Features = () => {
               Join {stats.totalUsers || 0}+ Students Already Sharing!
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              Be part of the growing CampusShare community. Start sharing and
-              discovering resources today.
+              Be part of the growing CampusShare community. Start sharing and discovering resources today.
             </p>
-
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-white text-purple-600 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
+              <button className="btn btn-primary bg-white text-purple-600 hover:shadow-lg hover:scale-105">
                 Create Free Account
               </button>
-              <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
+              <button className="btn btn-outline border-2 border-white text-white hover:bg-white hover:text-purple-600">
                 Browse Resources
               </button>
             </div>
