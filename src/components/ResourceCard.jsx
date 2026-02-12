@@ -14,6 +14,17 @@ const ResourceCard = ({ resource, onUpdate }) => {
   );
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
 
+  // 🔥 FIXED: Use the API base URL to construct the file URL
+  const getFileUrl = () => {
+    // If resource.fileUrl is already a full URL, use it
+    if (resource.fileUrl?.startsWith('http')) {
+      return resource.fileUrl;
+    }
+    // Otherwise, construct the URL using the API base
+    const baseURL = import.meta.env.VITE_API_URL || '/api';
+    return `${baseURL}/files/${resource.fileId}`;
+  };
+
   const handleLike = async (e) => {
     e.stopPropagation();
 
@@ -48,6 +59,25 @@ const ResourceCard = ({ resource, onUpdate }) => {
       console.error("Bookmark error:", error);
       alert("Failed to bookmark resource");
     }
+  };
+
+  const handleViewPdf = (e) => {
+    e.stopPropagation();
+    const url = getFileUrl();
+    // Open in new tab for viewing
+    window.open(url, '_blank');
+  };
+
+  const handleDownloadPdf = (e) => {
+    e.stopPropagation();
+    const url = getFileUrl();
+    // Create a link and trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = resource.fileName || 'document.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getTypeColor = (type) => {
@@ -132,23 +162,18 @@ const ResourceCard = ({ resource, onUpdate }) => {
         </div>
 
         <div className="flex gap-1">
-          <a
-            href={resource.fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleViewPdf}
             className="btn btn-sm btn-outline"
-            onClick={(e) => e.stopPropagation()}
           >
             <FiEye /> View
-          </a>
-          <a
-            href={resource.fileUrl}
-            download
+          </button>
+          <button
+            onClick={handleDownloadPdf}
             className="btn btn-sm btn-primary"
-            onClick={(e) => e.stopPropagation()}
           >
             <FiDownload /> Download
-          </a>
+          </button>
         </div>
       </div>
     </div>
