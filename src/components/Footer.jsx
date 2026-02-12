@@ -34,7 +34,7 @@ const Footer = () => {
             </p>
             <div className="footer-social">
               <a 
-                href="https://github.com" 
+                href="https://github.com/rajhemant076" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -42,7 +42,7 @@ const Footer = () => {
               >
                 <FiGithub />
               </a>
-              <a 
+              {/* <a 
                 href="https://twitter.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -50,9 +50,9 @@ const Footer = () => {
                 aria-label="Twitter"
               >
                 <FiTwitter />
-              </a>
+              </a> */}
               <a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/in/hemant-raj-04452a326" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -61,7 +61,7 @@ const Footer = () => {
                 <FiLinkedin />
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/hemant_raj1401?igsh=MThoMXR2ZTQxcmRieQ==" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -69,7 +69,7 @@ const Footer = () => {
               >
                 <FiInstagram />
               </a>
-              <a 
+              {/* <a 
                 href="https://youtube.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -77,7 +77,7 @@ const Footer = () => {
                 aria-label="YouTube"
               >
                 <FiYoutube />
-              </a>
+              </a> */}
             </div>
           </div>
 
@@ -141,11 +141,11 @@ const Footer = () => {
             <ul>
               <li>
                 <FiMapPin />
-                <span>123 Campus Drive, University City, UC 12345</span>
+                <span>123 Campus Share,Patna Bihar</span>
               </li>
               <li>
                 <FiPhone />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 9876543211</span>
               </li>
               <li>
                 <FiMail />
