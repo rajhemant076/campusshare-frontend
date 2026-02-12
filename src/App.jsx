@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer"; // ✅ ADDED: Footer component
+import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/Home";
@@ -11,6 +11,9 @@ import Signup from "./pages/Signup";
 import Upload from "./pages/Upload";
 import Profile from "./pages/Profile";
 import Bookmarks from "./pages/Bookmarks";
+import Features from "./pages/Features";
+import Contact from "./pages/Contact"; // ✅ ADDED: Contact page
+import About from "./pages/About";     // ✅ ADDED: About page
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PendingResources from "./pages/admin/PendingResources";
@@ -27,6 +30,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/contact" element={<Contact />} /> {/* ✅ ADDED: Contact route */}
+        <Route path="/about" element={<About />} />     {/* ✅ ADDED: About route */}
 
         {/* 🔐 STUDENT PROTECTED ROUTES */}
         <Route
@@ -99,7 +105,7 @@ const App = () => {
         {/* 🔀 404 - Redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer /> {/* ✅ ADDED: Footer appears on ALL pages */}
+      <Footer />
     </>
   );
 };

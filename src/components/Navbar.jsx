@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiHome, FiUpload, FiBookmark, FiUser, FiLogOut, FiShield, FiMenu, FiX } from 'react-icons/fi';
+import { 
+  FiHome, 
+  FiUpload, 
+  FiBookmark, 
+  FiUser, 
+  FiLogOut, 
+  FiShield, 
+  FiMenu, 
+  FiX, 
+  FiInfo, 
+  FiMail, 
+  FiUsers 
+} from 'react-icons/fi';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
@@ -66,6 +78,30 @@ const Navbar = () => {
             </Link>
           </li>
 
+          {/* ✅ FEATURES LINK - Public */}
+          <li>
+            <Link to="/features" onClick={handleNavClick}>
+              <FiInfo style={{ display: 'inline', marginRight: '0.3rem' }} />
+              Features
+            </Link>
+          </li>
+
+          {/* ✅ ABOUT LINK - Public */}
+          <li>
+            <Link to="/about" onClick={handleNavClick}>
+              <FiUsers style={{ display: 'inline', marginRight: '0.3rem' }} />
+              About
+            </Link>
+          </li>
+
+          {/* ✅ CONTACT LINK - Public */}
+          <li>
+            <Link to="/contact" onClick={handleNavClick}>
+              <FiMail style={{ display: 'inline', marginRight: '0.3rem' }} />
+              Contact
+            </Link>
+          </li>
+
           {/* LINKS FOR AUTHENTICATED USERS */}
           {isAuthenticated ? (
             <>
@@ -106,7 +142,7 @@ const Navbar = () => {
               {/* Logout button */}
               <li className="logout-item">
                 <button onClick={handleLogout} className="btn btn-sm btn-outline logout-btn">
-                  <FiLogOut />
+                  <FiLogOut style={{ display: 'inline', marginRight: '0.3rem' }} />
                   Logout
                 </button>
               </li>
