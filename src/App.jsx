@@ -1,7 +1,8 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer"; // ✅ ADDED: Footer component
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/Home";
@@ -22,12 +23,12 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
-        {/* Public */}
+        {/* 🔓 PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Student Protected */}
+        {/* 🔐 STUDENT PROTECTED ROUTES */}
         <Route
           path="/upload"
           element={
@@ -53,7 +54,7 @@ const App = () => {
           }
         />
 
-        {/* Admin Protected */}
+        {/* 🛡️ ADMIN PROTECTED ROUTES */}
         <Route
           path="/admin"
           element={
@@ -94,7 +95,11 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* 🔀 404 - Redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Footer /> {/* ✅ ADDED: Footer appears on ALL pages */}
     </>
   );
 };
