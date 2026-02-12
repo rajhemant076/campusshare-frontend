@@ -14,6 +14,7 @@ import {
   FiTrendingUp,
   FiDownload,
   FiUpload,
+  FiDatabase
 } from "react-icons/fi";
 
 import { FaGithub, FaTwitter, FaLinkedin, FaReact, FaNodeJs, FaJs } from "react-icons/fa";
@@ -376,7 +377,7 @@ const About = () => {
   const techStack = [
     { name: "React", icon: <FaReact className="w-8 h-8" />, color: "text-blue-400" },
     { name: "Node.js", icon: <FaNodeJs className="w-8 h-8" />, color: "text-green-600" },
-    { name: "MongoDB", icon: <SiMongodb className="w-8 h-8" />, color: "text-green-500" },
+    { name: "MongoDB", icon: <FiDatabase className="w-8 h-8" />, color: "text-green-500" },
     { name: "Express", icon: <SiExpress className="w-8 h-8" />, color: "text-gray-300" },
     { name: "JavaScript", icon: <FaJs className="w-8 h-8" />, color: "text-yellow-400" },
     { name: "JWT", icon: <SiJwt className="w-8 h-8" />, color: "text-purple-400" },
