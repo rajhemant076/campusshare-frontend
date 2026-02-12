@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+
 import {
   FiUsers,
   FiBookOpen,
@@ -19,11 +20,13 @@ import {
 
 import { FaGithub, FaTwitter, FaLinkedin, FaReact, FaNodeJs, FaJs } from "react-icons/fa";
 
-import { SiExpress, SiJwt, SiTailwindcss, SiRedux, SiMongodb } from "react-icons/si";
+import { SiExpress, SiJwt, SiTailwindcss, SiRedux } from "react-icons/si";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import api from "../api/api";
+
+
 
 
 /* ------------------ Stat Card ------------------ */
