@@ -18,7 +18,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
   const getFileUrl = () => {
     // Production - use Render backend URL
     if (import.meta.env.PROD) {
-      return `https://campusshare-backend.onrender.com/api/files/${resource.fileId}`;
+      return `https://campusshare-backend-1.onrender.com/api/files/${resource.fileId}`;
     }
     // Development - use localhost
     return `http://localhost:5000/api/files/${resource.fileId}`;

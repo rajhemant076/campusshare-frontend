@@ -26,7 +26,7 @@ const RejectedResources = () => {
   // 🔥 FIXED: Get full URL for PDF files
   const getFileUrl = (fileId) => {
     if (import.meta.env.PROD) {
-      return `https://campusshare-backend.onrender.com/api/files/${fileId}`;
+      return `https://campusshare-backend-1.onrender.com/api/files/${fileId}`;
     }
     return `http://localhost:5000/api/files/${fileId}`;
   };

@@ -2,7 +2,7 @@ import axios from "axios";
 
 // 🔥 FINAL FIX: Works on both Vercel (frontend) and Render (backend)
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://campusshare-backend.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
