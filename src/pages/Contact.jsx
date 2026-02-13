@@ -15,15 +15,12 @@ import {
   FiShield,
   FiBookOpen,
   FiChevronDown,
+  FiGithub,
+  FiLinkedin,
+  FiTwitter,
+  FiInstagram,
 } from "react-icons/fi";
-import {
-  FaGithub,
-  FaTwitter,
-  FaLinkedin,
-  FaDiscord,
-  FaInstagram,
-} from "react-icons/fa";
-import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 import api from "../api/api";
 
 const ContactInfoCard = ({ info, index }) => {
@@ -35,18 +32,18 @@ const ContactInfoCard = ({ info, index }) => {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="contact-info-card"
+      className="contact-info-card-enhanced"
     >
-      <div className={`contact-icon bg-gradient-to-r ${info.color}`}>
+      <div className={`contact-info-icon ${info.color}`}>
         {info.icon}
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-3">{info.title}</h3>
-      <div className="space-y-1 mb-4">
+      <h3 className="contact-info-title">{info.title}</h3>
+      <div className="contact-info-details">
         {info.details.map((detail, i) => (
-          <p key={i} className="text-gray-600">{detail}</p>
+          <p key={i} className="contact-info-detail">{detail}</p>
         ))}
       </div>
-      <a href={info.action} className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-medium transition-colors">
+      <a href={info.action} className="contact-info-action">
         {info.buttonText} <FiSend className="w-4 h-4" />
       </a>
     </motion.div>
@@ -229,35 +226,33 @@ const Contact = () => {
     {
       icon: <FiMail className="w-6 h-6" />,
       title: "Email Us",
-      details: ["support@campusshare.com", "admin@campusshare.com"],
+      details: ["support@campusshare.com", "We'll respond within 24 hours"],
       action: "mailto:support@campusshare.com",
       buttonText: "Send Email",
-      color: "from-blue-500 to-cyan-500",
+      color: "blue-gradient",
     },
     {
       icon: <FiMapPin className="w-6 h-6" />,
-      title: "Visit Us",
-      details: ["CampusShare HQ", "123 Education Street", "Tech City, TC 12345"],
+      title: "Virtual Office",
+      details: ["Available Online", "24/7 Support", "Global Community"],
       action: "#",
-      buttonText: "Get Directions",
-      color: "from-purple-500 to-pink-500",
+      buttonText: "Get in Touch",
+      color: "purple-gradient",
     },
     {
       icon: <FiClock className="w-6 h-6" />,
       title: "Support Hours",
-      details: ["Monday - Friday", "9:00 AM - 6:00 PM", "Weekend: Closed"],
+      details: ["Monday - Friday: 9:00 AM - 6:00 PM IST", "Saturday: 10:00 AM - 2:00 PM IST", "Sunday: Closed"],
       action: "#",
-      buttonText: "24/7 Support",
-      color: "from-green-500 to-emerald-500",
+      buttonText: "24/7 Online Support",
+      color: "green-gradient",
     },
   ];
 
   const socialLinks = [
-    { icon: <FaGithub className="w-5 h-5" />, url: "https://github.com/campusshare", label: "GitHub" },
-    { icon: <FaTwitter className="w-5 h-5" />, url: "https://twitter.com/campusshare", label: "Twitter" },
-    { icon: <FaLinkedin className="w-5 h-5" />, url: "https://linkedin.com/company/campusshare", label: "LinkedIn" },
-    { icon: <FaDiscord className="w-5 h-5" />, url: "https://discord.gg/campusshare", label: "Discord" },
-    { icon: <FaInstagram className="w-5 h-5" />, url: "https://instagram.com/campusshare", label: "Instagram" },
+    { icon: <FiGithub className="w-5 h-5" />, url: "https://github.com/rajhemant076", label: "GitHub" },
+    { icon: <FiLinkedin className="w-5 h-5" />, url: "https://www.linkedin.com/in/hemant-raj-04452a326", label: "LinkedIn" },
+    { icon: <FiInstagram className="w-5 h-5" />, url: "https://www.instagram.com/hemant_raj1401/", label: "Instagram" },
   ];
 
   const teamContacts = [
@@ -285,38 +280,42 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
-        <div className="absolute inset-0 opacity-10 bg-grid-pattern"></div>
-        <div className="container mx-auto px-4 relative z-10">
+    <div className="contact-page">
+      {/* Hero Section */}
+      <section className="contact-hero">
+        <div className="contact-hero-overlay"></div>
+        <div className="contact-hero-pattern"></div>
+        
+        <div className="contact-hero-content">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center text-white max-w-4xl mx-auto"
+            className="contact-hero-text"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="contact-hero-title">
               Get in{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-pink-300">
+              <span className="contact-hero-highlight">
                 Touch
               </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-100">
+            <p className="contact-hero-description">
               Have questions? We're here to help. Reach out to our team and we'll get back to you as soon as possible.
             </p>
           </motion.div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0">
+
+        <div className="contact-hero-wave">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
             <path fill="white" fillOpacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Contact Info Cards */}
+      <section className="contact-info-section">
+        <div className="container">
+          <div className="contact-info-grid">
             {contactInfo.map((info, index) => (
               <ContactInfoCard key={index} info={info} index={index} />
             ))}
@@ -324,34 +323,35 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50" id="contact-form">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      {/* Contact Form Section */}
+      <section className="contact-form-section" id="contact-form">
+        <div className="container">
+          <div className="contact-form-container">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white rounded-2xl p-8 shadow-lg"
+              className="contact-form-card"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Send us a message</h2>
-              <p className="text-gray-600 mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
+              <h2 className="contact-form-title">Send us a message</h2>
+              <p className="contact-form-subtitle">Fill out the form below and we'll get back to you within 24 hours.</p>
 
               {formStatus.success && (
-                <div className="alert alert-success flex items-center gap-3">
-                  <FiCheckCircle className="w-5 h-5 flex-shrink-0" />
+                <div className="alert alert-success">
+                  <FiCheckCircle className="w-5 h-5" />
                   <span>Message sent successfully! We'll get back soon.</span>
                 </div>
               )}
 
               {formStatus.error && (
-                <div className="alert alert-error flex items-center gap-3">
-                  <FiAlertCircle className="w-5 h-5 flex-shrink-0" />
+                <div className="alert alert-error">
+                  <FiAlertCircle className="w-5 h-5" />
                   <span>{formStatus.error}</span>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="form-row">
                   <div className="form-group">
                     <label className="form-label">
                       Your Name <span className="text-red-500">*</span>
@@ -431,11 +431,11 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={formStatus.submitting}
-                  className="btn btn-primary w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50"
+                  className="btn btn-primary btn-block"
                 >
                   {formStatus.submitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="spinner-sm"></div>
                       Sending...
                     </>
                   ) : (
@@ -452,31 +452,32 @@ const Contact = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
+              className="contact-team-section"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Contact our team</h2>
-              <p className="text-gray-600 mb-8">Get in touch with the right team member for your query.</p>
+              <h2 className="contact-team-title">Contact our team</h2>
+              <p className="contact-team-subtitle">Get in touch with the right team member for your query.</p>
 
-              <div className="space-y-4">
+              <div className="contact-team-list">
                 {teamContacts.map((contact, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow"
+                    className="contact-team-card"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl flex items-center justify-center text-purple-600">
+                    <div className="contact-team-card-inner">
+                      <div className="contact-team-icon">
                         {contact.icon}
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900">{contact.name}</h3>
-                        <p className="text-gray-600 text-sm mb-2">{contact.role}</p>
-                        <a href={`mailto:${contact.email}`} className="text-purple-600 hover:text-purple-700 font-medium flex items-center gap-1 text-sm">
+                      <div className="contact-team-info">
+                        <h3 className="contact-team-name">{contact.name}</h3>
+                        <p className="contact-team-role">{contact.role}</p>
+                        <a href={`mailto:${contact.email}`} className="contact-team-email">
                           <FiMail className="w-4 h-4" />
                           {contact.email}
                         </a>
-                        <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                        <p className="contact-team-response">
                           <FiClock className="w-3 h-3" />
                           {contact.response}
                         </p>
@@ -486,19 +487,19 @@ const Contact = () => {
                 ))}
               </div>
 
-              <div className="mt-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 text-white">
-                <h3 className="text-xl font-semibold mb-4">Connect with us</h3>
-                <p className="text-white/90 mb-6">
+              <div className="contact-social-card">
+                <h3 className="contact-social-title">Connect with us</h3>
+                <p className="contact-social-description">
                   Follow us on social media for updates, tips, and community highlights.
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="contact-social-links">
                   {socialLinks.map((social, index) => (
                     <a
                       key={index}
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-110"
+                      className="contact-social-link"
                       aria-label={social.label}
                     >
                       {social.icon}
@@ -511,32 +512,31 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
+      {/* FAQ Section */}
+      <section className="contact-faq-section">
+        <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-12"
+            className="contact-section-header"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="contact-section-title">
               Frequently Asked{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="contact-section-highlight">
                 Questions
               </span>
             </h2>
-            <p className="text-xl text-gray-600">Find answers to common questions about CampusShare.</p>
+            <p className="contact-section-subtitle">Find answers to common questions about CampusShare.</p>
           </motion.div>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="contact-categories">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                  activeCategory === category.id
-                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                className={`contact-category-btn ${
+                  activeCategory === category.id ? "active" : ""
                 }`}
               >
                 {category.icon}
@@ -545,29 +545,25 @@ const Contact = () => {
             ))}
           </div>
 
-          <div className="max-w-3xl mx-auto">
+          <div className="contact-faq-list">
             {filteredFaqs.map((faq, index) => (
               <motion.div
                 key={faq.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="mb-4"
+                className="contact-faq-item"
               >
                 <button
                   onClick={() => toggleFaq(faq.id)}
-                  className="faq-item w-full"
+                  className="contact-faq-question"
                 >
-                  <div className="faq-question">
-                    <h3 className="text-lg font-semibold text-gray-900 pr-8">{faq.question}</h3>
-                    <FiChevronDown className={`faq-chevron ${faq.open ? "open" : ""}`} />
-                  </div>
-                  <div className={`mt-4 text-gray-600 overflow-hidden transition-all duration-300 ${
-                    faq.open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                  }`}>
-                    {faq.answer}
-                  </div>
+                  <h3 className="contact-faq-question-text">{faq.question}</h3>
+                  <FiChevronDown className={`contact-faq-chevron ${faq.open ? "open" : ""}`} />
                 </button>
+                <div className={`contact-faq-answer ${faq.open ? "open" : ""}`}>
+                  <p>{faq.answer}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -576,14 +572,14 @@ const Contact = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-center mt-12"
+            className="contact-faq-footer"
           >
-            <p className="text-gray-600 mb-4">Still have questions?</p>
+            <p className="contact-faq-footer-text">Still have questions?</p>
             <button
               onClick={() => {
                 document.querySelector("#contact-form")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300"
+              className="btn btn-primary"
             >
               <FiMessageSquare className="w-5 h-5" />
               Contact Support
@@ -591,48 +587,6 @@ const Contact = () => {
           </motion.div>
         </div>
       </section>
-
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Visit Our Campus</h3>
-                <p className="text-gray-600 mb-6">
-                  We're located at the heart of the tech district. Drop by for a visit or attend one of our community events.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <FiMapPin className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-gray-900">CampusShare HQ</p>
-                      <p className="text-gray-600">123 Education Street, Tech City, TC 12345</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <FiClock className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-gray-900">Office Hours</p>
-                      <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                      <p className="text-gray-600">Saturday - Sunday: Closed</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="h-64 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white mb-4">
-                    <FiMapPin className="w-8 h-8" />
-                  </div>
-                  <p className="text-gray-600">Interactive Map Coming Soon</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* <Footer /> */}
     </div>
   );
 };
