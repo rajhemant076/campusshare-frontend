@@ -247,9 +247,6 @@ img {
 /* ===================================== */
 /* NAVBAR STYLES - White Background */
 /* ===================================== */
-/* ===================================== */
-/* NAVBAR STYLES - ENHANCED */
-/* ===================================== */
 .navbar {
   background: var(--bg-nav);
   border-bottom: 1px solid var(--border);
@@ -341,80 +338,9 @@ img {
   animation: slideIn var(--transition-normal) var(--transition-timing);
 }
 
-/* ===================================== */
-/* NAVBAR BUTTON STYLES - Login/Signup Fixes */
-/* ===================================== */
-
-/* Override default button styles for navbar */
-.navbar-links .btn {
-  padding: 0.6rem 1.2rem;
-  font-size: 0.95rem;
-  min-width: 85px;
-  text-align: center;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast) var(--transition-timing);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.5;
-}
-
-/* Login button - Secondary color */
-.navbar-links .btn-secondary {
-  background: var(--secondary-gradient);
-  color: white !important;
-  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
-}
-
-.navbar-links .btn-secondary:hover {
-  background: linear-gradient(135deg, var(--secondary-dark), var(--secondary));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4);
-  color: white !important;
-}
-
-/* Signup button - Primary color */
-.navbar-links .btn-primary {
-  background: var(--primary-gradient);
-  color: white !important;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-}
-
-.navbar-links .btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
-  color: white !important;
-}
-
-/* Remove any inherited styles that might affect buttons */
-.navbar-links li .btn {
-  padding: 0.6rem 1.2rem !important;
-  color: white !important;
-}
-
-.navbar-links li .btn-primary,
-.navbar-links li .btn-secondary {
-  color: white !important;
-}
-
-/* Adjust spacing between buttons */
-.navbar-links li:has(.btn) {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.navbar-links li:last-child {
-  margin-left: 0.25rem;
-}
-
-/* Ensure buttons are properly aligned */
-.navbar-links .btn-sm {
-  padding: 0.6rem 1.2rem !important;
-  font-size: 0.95rem !important;
+@keyframes slideIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Hamburger Button */
@@ -467,152 +393,6 @@ img {
   box-shadow: var(--shadow-md);
 }
 
-@keyframes slideIn {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-/* ===================================== */
-/* RESPONSIVE NAVBAR */
-/* ===================================== */
-
-/* Tablet and Mobile */
-@media (max-width: 768px) {
-  .navbar-container {
-    flex-wrap: wrap;
-  }
-
-  .hamburger-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .navbar-links {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) 0;
-    margin-top: var(--spacing-md);
-    border-top: 1px solid var(--border);
-  }
-
-  .navbar-links.active {
-    display: flex;
-    animation: slideDown var(--transition-normal) var(--transition-timing);
-  }
-
-  .navbar-links li {
-    width: 100%;
-    text-align: center;
-  }
-
-  .navbar-links a {
-    width: 100%;
-    padding: var(--spacing-sm);
-    justify-content: center;
-  }
-
-  .navbar-links a.active::after {
-    bottom: -2px;
-  }
-
-  /* Mobile button styles */
-  .navbar-links .btn,
-  .navbar-links li .btn,
-  .navbar-links .btn-primary,
-  .navbar-links .btn-secondary {
-    width: 100% !important;
-    padding: 0.8rem !important;
-    margin: 0.25rem 0 !important;
-    min-width: auto !important;
-  }
-
-  .navbar-links li:has(.btn) {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.25rem;
-  }
-
-  .navbar-links li:last-child {
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
-
-  .logout-item {
-    width: 100%;
-  }
-
-  .logout-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Navbar Animation */
-  .navbar-links {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    padding: 0;
-    transition: all var(--transition-normal) var(--transition-timing);
-  }
-
-  .navbar-links.active {
-    max-height: 500px;
-    opacity: 1;
-    padding: var(--spacing-md) 0;
-  }
-
-  .navbar-links li {
-    transform: translateY(-20px);
-    opacity: 0;
-    transition: all var(--transition-normal) var(--transition-timing);
-  }
-
-  .navbar-links.active li {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .navbar-links.active li:nth-child(1) { transition-delay: 0.1s; }
-  .navbar-links.active li:nth-child(2) { transition-delay: 0.15s; }
-  .navbar-links.active li:nth-child(3) { transition-delay: 0.2s; }
-  .navbar-links.active li:nth-child(4) { transition-delay: 0.25s; }
-  .navbar-links.active li:nth-child(5) { transition-delay: 0.3s; }
-  .navbar-links.active li:nth-child(6) { transition-delay: 0.35s; }
-  .navbar-links.active li:nth-child(7) { transition-delay: 0.4s; }
-  .navbar-links.active li:nth-child(8) { transition-delay: 0.45s; }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .navbar-logo {
-    font-size: 1.5rem;
-  }
-
-  .navbar-logo svg {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .navbar-links .btn,
-  .navbar-links li .btn {
-    padding: 0.7rem !important;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ===================================== */
 /* BUTTON STYLES - ENHANCED BLUE THEME */
 /* ===================================== */
@@ -645,7 +425,6 @@ img {
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
   transition: width 0.3s, height 0.3s;
-  color: white;
 }
 
 .btn:active::after {
@@ -1955,7 +1734,6 @@ input[type="file"].form-input::file-selector-button:hover {
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
-  /* display: flex; */
 }
 
 .footer-grid {
@@ -1989,10 +1767,6 @@ input[type="file"].form-input::file-selector-button:hover {
 
 .footer-logo:hover {
   opacity: 0.8;
-}
-.footer-top{
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .footer-logo span {
@@ -3151,18 +2925,6 @@ input[type="file"].form-input::file-selector-button:hover {
   
   .footer-brand {
     min-width: 200px;
-    
-  }
-  .footer-top{
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    gap: 2vh;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
   }
 }
 
