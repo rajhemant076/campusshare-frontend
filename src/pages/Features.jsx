@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   AcademicCapIcon,
   DocumentCheckIcon,
@@ -31,30 +32,24 @@ const FeatureCard = ({ feature, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="feature-card"
+      className="feature-card-enhanced"
     >
-      <div
-        className={`feature-icon bg-gradient-to-r ${feature.color}`}
-      >
-        {feature.icon}
-      </div>
-
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-        {feature.title}
-      </h3>
-
-      <p className="text-gray-600 mb-4">{feature.description}</p>
-
-      {feature.stat && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500">{feature.statLabel}</span>
-            <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              {feature.stat}
-            </span>
-          </div>
+      <div className="feature-card-inner">
+        <div className={`feature-icon-wrapper ${feature.color}`}>
+          {feature.icon}
         </div>
-      )}
+
+        <h3 className="feature-card-title">{feature.title}</h3>
+
+        <p className="feature-card-description">{feature.description}</p>
+
+        {feature.stat && (
+          <div className="feature-card-stat">
+            <span className="feature-stat-label">{feature.statLabel}</span>
+            <span className="feature-stat-value">{feature.stat}</span>
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 };
@@ -66,34 +61,38 @@ const ResourceCard = ({ resource, index }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="resource-card"
+      className="feature-resource-card"
     >
-      <div className="flex items-center gap-3 mb-3">
-        <span className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-semibold">
-          {resource.branch || "Unknown"}
+      <div className="resource-card-badges">
+        <span className="badge badge-primary">
+          {resource.branch || "CSE"}
         </span>
-        <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-semibold">
-          Sem {resource.semester || "N/A"}
+        <span className="badge badge-secondary">
+          Sem {resource.semester || "1"}
+        </span>
+        <span className="badge badge-outline">
+          {resource.type || "Notes"}
         </span>
       </div>
 
-      <h4 className="text-lg font-semibold text-gray-900 mb-2">
-        {resource.title || "Untitled"}
+      <h4 className="resource-card-title">
+        {resource.title || "Data Structures Notes"}
       </h4>
 
-      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-        {resource.description || "No description available"}
+      <p className="resource-card-description">
+        {resource.description || "Complete notes for Data Structures covering arrays, linked lists, trees, and graphs."}
       </p>
 
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <span>By {resource.uploadedBy?.name || "Anonymous"}</span>
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1">
-            <HeartIcon className="w-4 h-4" /> {resource.likesCount || 0}
+      <div className="resource-card-footer">
+        <span className="resource-author">
+          By {resource.uploadedBy?.name || "John Doe"}
+        </span>
+        <div className="resource-stats">
+          <span className="resource-stat">
+            <HeartIcon className="w-4 h-4" /> {resource.likesCount || 24}
           </span>
-          <span className="flex items-center gap-1">
-            <BookmarkIcon className="w-4 h-4" />{" "}
-            {resource.bookmarks?.length || 0}
+          <span className="resource-stat">
+            <BookmarkIcon className="w-4 h-4" /> {resource.bookmarks?.length || 12}
           </span>
         </div>
       </div>
@@ -219,7 +218,7 @@ const Features = () => {
       icon: <CloudArrowUpIcon className="w-8 h-8" />,
       title: "Easy File Upload",
       description: "Upload notes, assignments, PYQs, and lab manuals with just a few clicks. Support for PDF format up to 10MB.",
-      color: "from-blue-500 to-cyan-500",
+      color: "blue-gradient",
       stat: `${stats.totalResources || 0}+`,
       statLabel: "Total Resources",
     },
@@ -227,7 +226,7 @@ const Features = () => {
       icon: <MagnifyingGlassIcon className="w-8 h-8" />,
       title: "Smart Search",
       description: "Find resources by branch, semester, subject, or type. Advanced filters help you get exactly what you need.",
-      color: "from-purple-500 to-pink-500",
+      color: "purple-gradient",
       stat: `${stats.totalBranches} Branches`,
       statLabel: `${stats.totalSemesters} Semesters`,
     },
@@ -235,7 +234,7 @@ const Features = () => {
       icon: <DocumentCheckIcon className="w-8 h-8" />,
       title: "Admin Approval",
       description: "Quality control through admin review system. Only approved resources are visible to the community.",
-      color: "from-green-500 to-emerald-500",
+      color: "green-gradient",
       stat: `${stats.totalApproved || 0}+`,
       statLabel: "Approved Resources",
     },
@@ -243,19 +242,19 @@ const Features = () => {
       icon: <BookmarkIcon className="w-8 h-8" />,
       title: "Bookmark Resources",
       description: "Save important resources for quick access later. Build your personal library of study materials.",
-      color: "from-yellow-500 to-orange-500",
+      color: "yellow-gradient",
     },
     {
       icon: <HeartIcon className="w-8 h-8" />,
       title: "Like & Engage",
       description: "Show appreciation for helpful resources. Popular resources rise to the top.",
-      color: "from-red-500 to-rose-500",
+      color: "red-gradient",
     },
     {
       icon: <UserGroupIcon className="w-8 h-8" />,
       title: "Student Community",
       description: "Connect with fellow students from different branches and semesters.",
-      color: "from-indigo-500 to-blue-500",
+      color: "indigo-gradient",
       stat: `${stats.totalUsers || 0}+`,
       statLabel: "Active Students",
     },
@@ -263,37 +262,37 @@ const Features = () => {
       icon: <AcademicCapIcon className="w-8 h-8" />,
       title: "Branch Specific",
       description: "Resources organized by CSE, ECE, EEE, MECH, CIVIL, IT, and other branches.",
-      color: "from-teal-500 to-cyan-500",
+      color: "teal-gradient",
     },
     {
       icon: <ClockIcon className="w-8 h-8" />,
       title: "Semester Wise",
       description: "Content categorized from semester 1 to 8, making it easy to find relevant material.",
-      color: "from-amber-500 to-yellow-500",
+      color: "amber-gradient",
     },
     {
       icon: <ShieldCheckIcon className="w-8 h-8" />,
       title: "Secure Authentication",
       description: "JWT-based authentication with encrypted passwords. Your data stays safe.",
-      color: "from-violet-500 to-purple-500",
+      color: "violet-gradient",
     },
     {
       icon: <ChartBarIcon className="w-8 h-8" />,
       title: "Admin Dashboard",
       description: "Comprehensive analytics and management tools for administrators.",
-      color: "from-slate-500 to-gray-500",
+      color: "slate-gradient",
     },
     {
       icon: <BuildingLibraryIcon className="w-8 h-8" />,
       title: "Digital Library",
       description: "Create your own digital collection of academic resources.",
-      color: "from-cyan-500 to-blue-500",
+      color: "cyan-gradient",
     },
     {
       icon: <CpuChipIcon className="w-8 h-8" />,
       title: "Modern Tech Stack",
       description: "Built with MERN stack, GridFS for file storage, and responsive design.",
-      color: "from-fuchsia-500 to-pink-500",
+      color: "fuchsia-gradient",
     },
   ];
 
@@ -337,7 +336,7 @@ const Features = () => {
           <div className="text-red-600 mb-4">⚠️ {stats.error}</div>
           <button
             onClick={fetchRealTimeData}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark"
           >
             Try Again
           </button>
@@ -348,120 +347,131 @@ const Features = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-90"></div>
-        <div className="absolute inset-0 opacity-20 bg-grid-pattern"></div>
+    <div className="features-page">
+      {/* Hero Section */}
+      <section className="features-hero">
+        <div className="features-hero-overlay"></div>
+        <div className="features-hero-pattern"></div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="features-hero-content">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center text-white max-w-4xl mx-auto"
+            className="features-hero-text"
           >
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">Live Data • Updated Real-time</span>
+            <div className="features-live-badge">
+              <div className="live-dot"></div>
+              <span>Live Data • Updated Real-time</span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="features-hero-title">
               Everything You Need in{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-pink-300">
+              <span className="features-hero-highlight">
                 One Place
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl mb-8 text-gray-100">
+            <p className="features-hero-description">
               CampusShare provides a complete platform for{" "}
               {stats.totalUsers || 0}+ students to share, discover, and
               collaborate on {stats.totalResources || 0}+ academic resources.
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8">
+            <div className="features-stats-grid">
               {statCards.map((stat, index) => (
-                <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl font-bold text-white mb-1">
+                <div key={index} className="features-stat-item">
+                  <div className="features-stat-value">
                     {stats.loading ? (
-                      <div className="h-8 w-20 bg-white/20 animate-pulse rounded mx-auto"></div>
+                      <div className="features-stat-skeleton"></div>
                     ) : (
                       stat.value
                     )}
                   </div>
-                  <div className="text-xs text-white/80">{stat.label}</div>
-                  <div className="text-xs mt-1 text-green-300">{stat.change}</div>
+                  <div className="features-stat-label">{stat.label}</div>
+                  <div className="features-stat-change">{stat.change}</div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn btn-primary">Get Started Free</button>
-              <button className="btn btn-outline border-2 border-white text-white hover:bg-white hover:text-purple-600">
+            <div className="features-hero-buttons">
+              <Link to="/signup" className="btn btn-primary btn-lg">
+                Get Started Free
+              </Link>
+              <Link to="/resources" className="btn btn-outline-light btn-lg">
                 Browse Resources
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0">
+        <div className="features-hero-wave">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
             <path fill="white" fillOpacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
           </svg>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {/* Stats Section */}
+      <section className="features-stats-section">
+        <div className="container">
+          <div className="features-stats-cards">
             {statCards.map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.5 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center group"
+                className="features-stat-card"
               >
-                <div className={`w-20 h-20 mx-auto bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                <div className={`features-stat-card-icon ${stat.color}`}>
                   {stat.icon}
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                <div className="features-stat-card-value">
                   {stats.loading ? (
-                    <div className="h-8 w-24 bg-gray-200 animate-pulse rounded mx-auto"></div>
+                    <div className="features-stat-card-skeleton"></div>
                   ) : (
                     stat.value
                   )}
                 </div>
-                <div className="text-gray-600 mb-1">{stat.label}</div>
-                <div className="text-sm text-green-600 font-medium">{stat.change}</div>
+                <div className="features-stat-card-label">{stat.label}</div>
+                <div className="features-stat-card-change">{stat.change}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Resources by Branch</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      {/* Branch Stats Section */}
+      <section className="features-branch-section">
+        <div className="container">
+          <div className="features-branch-card">
+            <h3 className="features-branch-title">Resources by Branch</h3>
+            <div className="features-branch-grid">
               {branchStats.length > 0 ? (
                 branchStats.map((branch, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-lg font-semibold text-gray-900">
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="features-branch-item"
+                  >
+                    <div className="features-branch-name">
                       {branch.branch || branch._id}
                     </div>
-                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                    <div className="features-branch-count">
                       {branch.count}
                     </div>
-                    <div className="text-xs text-gray-500">resources</div>
-                  </div>
+                    <div className="features-branch-label">resources</div>
+                  </motion.div>
                 ))
               ) : (
                 [1,2,3,4,5,6,7].map((i) => (
-                  <div key={i} className="text-center animate-pulse">
-                    <div className="h-6 bg-gray-200 rounded w-16 mx-auto mb-2"></div>
-                    <div className="h-8 bg-gray-200 rounded w-12 mx-auto mb-1"></div>
-                    <div className="h-4 bg-gray-200 rounded w-20 mx-auto"></div>
+                  <div key={i} className="features-branch-skeleton">
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
                   </div>
                 ))
               )}
@@ -470,24 +480,27 @@ const Features = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
+      {/* Features Grid Section */}
+      <section className="features-grid-section">
+        <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="features-section-header"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="features-section-title">
               Powerful Features for{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="features-section-highlight">
                 Students & Admins
               </span>
             </h2>
-            <p className="text-xl text-gray-600">Everything you need to succeed in your academic journey</p>
+            <p className="features-section-subtitle">
+              Everything you need to succeed in your academic journey
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="features-grid">
             {features.map((feature, index) => (
               <FeatureCard key={index} feature={feature} index={index} />
             ))}
@@ -495,98 +508,99 @@ const Features = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-12">
+      {/* Recently Added Section */}
+      <section className="features-recent-section">
+        <div className="container">
+          <div className="features-recent-header">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">Recently Added</h3>
-              <p className="text-gray-600">Latest resources shared by students</p>
+              <h3 className="features-recent-title">Recently Added</h3>
+              <p className="features-recent-subtitle">Latest resources shared by students</p>
             </div>
-            <button className="text-purple-600 hover:text-purple-700 font-semibold">View All →</button>
+            <Link to="/resources" className="features-view-all">
+              View All <span className="features-view-all-arrow">→</span>
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="features-resource-grid">
             {recentResources.length > 0
-              ? recentResources.map((resource, index) => (
+              ? recentResources.slice(0, 3).map((resource, index) => (
                   <ResourceCard key={index} resource={resource} index={index} />
                 ))
               : [1, 2, 3].map((i) => (
-                  <div key={i} className="bg-gray-50 rounded-xl p-6 animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  <div key={i} className="features-resource-skeleton">
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
                   </div>
                 ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-12">
+      {/* Most Popular Section */}
+      <section className="features-popular-section">
+        <div className="container">
+          <div className="features-popular-header">
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">Most Popular</h3>
-              <p className="text-gray-600">Most liked resources in CampusShare</p>
+              <h3 className="features-popular-title">Most Popular</h3>
+              <p className="features-popular-subtitle">Most liked resources in CampusShare</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="features-resource-grid">
             {popularResources.length > 0
-              ? popularResources.map((resource, index) => (
+              ? popularResources.slice(0, 3).map((resource, index) => (
                   <ResourceCard key={index} resource={resource} index={index} />
                 ))
               : [1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-xl p-6 animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  <div key={i} className="features-resource-skeleton">
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
+                    <div className="skeleton"></div>
                   </div>
                 ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-purple-50 to-indigo-50">
-        <div className="container mx-auto px-4">
+      {/* How It Works Section */}
+      <section className="features-howitworks-section">
+        <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="features-section-header"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="features-section-title">
               How{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="features-section-highlight">
                 CampusShare
               </span>{" "}
               Works
             </h2>
-            <p className="text-xl text-gray-600">Get started in just a few simple steps</p>
+            <p className="features-section-subtitle">Get started in just a few simple steps</p>
           </motion.div>
 
-          <div className="relative">
-            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-purple-200 via-indigo-200 to-purple-200"></div>
-            <div className="space-y-12 relative">
+          <div className="features-timeline">
+            <div className="features-timeline-line"></div>
+            <div className="features-timeline-steps">
               {howItWorks.map((item, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-8`}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={`features-timeline-step ${index % 2 === 0 ? "left" : "right"}`}
                 >
-                  <div className="lg:w-1/2">
-                    <div className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${index % 2 === 0 ? "lg:text-right" : "lg:text-left"}`}>
-                      <div className={`flex items-center gap-4 mb-4 ${index % 2 === 0 ? "lg:flex-row-reverse" : ""}`}>
-                        <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                          {item.step}
-                        </div>
-                        <h3 className="text-2xl font-semibold text-gray-900">{item.title}</h3>
-                      </div>
-                      <p className="text-gray-600 text-lg">{item.description}</p>
+                  <div className="features-timeline-content">
+                    <div className="features-timeline-icon">
+                      <span className="features-timeline-number">{item.step}</span>
+                      {item.icon}
                     </div>
+                    <h3 className="features-timeline-title">{item.title}</h3>
+                    <p className="features-timeline-description">{item.description}</p>
                   </div>
-                  <div className="lg:w-1/2"></div>
                 </motion.div>
               ))}
             </div>
@@ -594,33 +608,32 @@ const Features = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-indigo-600">
-        <div className="container mx-auto px-4 text-center">
+      {/* CTA Section */}
+      <section className="features-cta-section">
+        <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto"
+            className="features-cta-content"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="features-cta-title">
               Join {stats.totalUsers || 0}+ Students Already Sharing!
             </h2>
-            <p className="text-xl text-white/90 mb-8">
+            <p className="features-cta-description">
               Be part of the growing CampusShare community. Start sharing and discovering resources today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn btn-primary bg-white text-purple-600 hover:shadow-lg hover:scale-105">
+            <div className="features-cta-buttons">
+              <Link to="/signup" className="btn btn-primary btn-lg">
                 Create Free Account
-              </button>
-              <button className="btn btn-outline border-2 border-white text-white hover:bg-white hover:text-purple-600">
+              </Link>
+              <Link to="/resources" className="btn btn-outline-light btn-lg">
                 Browse Resources
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>
       </section>
-
-      {/* <Footer /> */}
     </div>
   );
 };
