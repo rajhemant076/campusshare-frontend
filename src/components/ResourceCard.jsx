@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 
 const ResourceCard = ({ resource, onUpdate }) => {
   const { isAuthenticated, user } = useAuth();
-
   const [liked, setLiked] = useState(
     user?.likedResources?.includes(resource._id) || false
   );
@@ -13,15 +12,45 @@ const ResourceCard = ({ resource, onUpdate }) => {
     user?.bookmarks?.includes(resource._id) || false
   );
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
+  const [loading, setLoading] = useState(false);
 
-  // 🔥 CRITICAL FIX: Get the FULL backend URL for PDF files
+  // ✅ FIXED: Get the FULL backend URL for PDF files
   const getFileUrl = () => {
-    // Production - use Render backend URL
-    if (import.meta.env.PROD) {
-      return `https://campusshare-backend-1.onrender.com/api/files/${resource.fileId}`;
+    const baseURL = import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com/api';
+    return `${baseURL}/files/${resource.fileId}`;
+  };
+
+  const handleViewPdf = (e) => {
+    e.stopPropagation();
+    const url = getFileUrl();
+    console.log('📄 Opening PDF URL:', url);
+    window.open(url, '_blank');
+  };
+
+  const handleDownloadPdf = async (e) => {
+    e.stopPropagation();
+    const url = getFileUrl();
+    setLoading(true);
+    
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Download failed');
+      
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = resource.fileName || 'document.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Failed to download file. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    // Development - use localhost
-    return `http://localhost:5000/api/files/${resource.fileId}`;
   };
 
   const handleLike = async (e) => {
@@ -58,35 +87,6 @@ const ResourceCard = ({ resource, onUpdate }) => {
       console.error("Bookmark error:", error);
       alert("Failed to bookmark resource");
     }
-  };
-
-  const handleViewPdf = (e) => {
-    e.stopPropagation();
-    const url = getFileUrl();
-    window.open(url, '_blank');
-  };
-
-  const handleDownloadPdf = (e) => {
-    e.stopPropagation();
-    const url = getFileUrl();
-    
-    // For download, we need to fetch the file first
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = resource.fileName || 'document.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(blobUrl);
-      })
-      .catch(error => {
-        console.error('Download error:', error);
-        alert('Failed to download file. Please try again.');
-      });
   };
 
   const getTypeColor = (type) => {
@@ -174,14 +174,16 @@ const ResourceCard = ({ resource, onUpdate }) => {
           <button
             onClick={handleViewPdf}
             className="btn btn-sm btn-outline"
+            disabled={loading}
           >
             <FiEye /> View
           </button>
           <button
             onClick={handleDownloadPdf}
             className="btn btn-sm btn-primary"
+            disabled={loading}
           >
-            <FiDownload /> Download
+            <FiDownload /> {loading ? '...' : 'Download'}
           </button>
         </div>
       </div>

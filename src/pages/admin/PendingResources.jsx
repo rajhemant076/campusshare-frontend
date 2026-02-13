@@ -24,12 +24,10 @@ const PendingResources = () => {
     }
   };
 
-  // 🔥 FIXED: Get full URL for PDF files
+  // ✅ FIXED: Get full URL for PDF files using environment variable
   const getFileUrl = (fileId) => {
-    if (import.meta.env.PROD) {
-      return `https://campusshare-backend-1.onrender.com/api/files/${fileId}`;
-    }
-    return `http://localhost:5000/api/files/${fileId}`;
+    const baseURL = import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com/api';
+    return `${baseURL}/files/${fileId}`;
   };
 
   const handleApprove = async (id) => {
