@@ -1773,6 +1773,7 @@ input[type="file"].form-input::file-selector-button:hover {
 .footer-top{
   display: flex;
   flex-wrap: wrap;
+  /* gap: 2vh; */
 }
 
 .footer-logo span {
@@ -1826,7 +1827,7 @@ input[type="file"].form-input::file-selector-button:hover {
   padding-bottom: var(--spacing-sm);
 }
 
-.footer-title::after {
+/* .footer-title::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -1835,12 +1836,13 @@ input[type="file"].form-input::file-selector-button:hover {
   height: 3px;
   background: var(--primary-gradient);
   border-radius: var(--radius-full);
-}
+} */
 
 .footer-links,
 .footer-contact {
   flex: 1;
   min-width: 160px;
+  text-align: center;
 }
 
 .footer-links ul,
@@ -2931,8 +2933,16 @@ input[type="file"].form-input::file-selector-button:hover {
   
   .footer-brand {
     min-width: 200px;
+    /* text-align: center; */
     
   }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+@media(max-width:990px){
   .footer-top{
     flex-direction: column;
     justify-content: center;
@@ -2940,10 +2950,7 @@ input[type="file"].form-input::file-selector-button:hover {
     align-items: center;
     gap: 2vh;
   }
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
+
 }
 
 /* Tablet Landscape */
