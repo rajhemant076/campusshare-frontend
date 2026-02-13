@@ -425,6 +425,7 @@ img {
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
   transition: width 0.3s, height 0.3s;
+  color: white;
 }
 
 .btn:active::after {
@@ -1734,6 +1735,7 @@ input[type="file"].form-input::file-selector-button:hover {
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
+  /* display: flex; */
 }
 
 .footer-grid {
@@ -1767,6 +1769,10 @@ input[type="file"].form-input::file-selector-button:hover {
 
 .footer-logo:hover {
   opacity: 0.8;
+}
+.footer-top{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .footer-logo span {
@@ -2925,6 +2931,18 @@ input[type="file"].form-input::file-selector-button:hover {
   
   .footer-brand {
     min-width: 200px;
+    
+  }
+  .footer-top{
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    gap: 2vh;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
