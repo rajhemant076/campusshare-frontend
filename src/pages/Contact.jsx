@@ -362,7 +362,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       className="form-input"
-                      placeholder="John Doe"
+                      placeholder="Your name"
                       required
                     />
                   </div>
@@ -376,7 +376,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="form-input"
-                      placeholder="john@example.com"
+                      placeholder="yourname@gmail.com"
                       required
                     />
                   </div>
