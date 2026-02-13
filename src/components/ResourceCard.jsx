@@ -14,10 +14,16 @@ const ResourceCard = ({ resource, onUpdate }) => {
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
   const [loading, setLoading] = useState(false);
 
-  // ✅ FIXED: Get the FULL backend URL for PDF files
+  // ✅ FIXED: Get the FULL backend URL for PDF files with proper formatting
   const getFileUrl = () => {
-    const baseURL = import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com/api';
-    return `${baseURL}/files/${resource.fileId}`;
+    const baseURL = import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com';
+    // Remove trailing slash if present and add /api/files/{id}
+    const cleanBaseURL = baseURL.replace(/\/$/, '');
+    // If baseURL already includes /api, don't add it again
+    if (cleanBaseURL.endsWith('/api')) {
+      return `${cleanBaseURL}/files/${resource.fileId}`;
+    }
+    return `${cleanBaseURL}/api/files/${resource.fileId}`;
   };
 
   const handleViewPdf = (e) => {
@@ -94,7 +100,9 @@ const ResourceCard = ({ resource, onUpdate }) => {
       Notes: "badge-primary",
       Assignment: "badge-secondary",
       PYQ: "badge-success",
+      "Previous Year Question": "badge-success", // Handle full form
       Lab: "badge-warning",
+      "Lab Manual": "badge-warning", // Handle full form
     };
     return colors[type] || "badge-primary";
   };
@@ -144,6 +152,13 @@ const ResourceCard = ({ resource, onUpdate }) => {
             Uploaded by: <strong>{resource.uploadedBy.name}</strong>
           </p>
         )}
+
+        {/* Show file size if available */}
+        {resource.fileSize && (
+          <p style={{ fontSize: "0.75rem", color: "var(--text-light)", marginTop: "0.5rem" }}>
+            Size: {(resource.fileSize / (1024 * 1024)).toFixed(2)} MB
+          </p>
+        )}
       </div>
 
       <div className="card-footer">
@@ -153,6 +168,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             className="btn btn-sm btn-icon btn-outline"
             style={{ color: liked ? "var(--error)" : "inherit" }}
             title="Like"
+            disabled={loading}
           >
             <FiHeart fill={liked ? "var(--error)" : "none"} />
             <span style={{ fontSize: "0.875rem", marginLeft: "0.25rem" }}>
@@ -165,6 +181,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             className="btn btn-sm btn-icon btn-outline"
             style={{ color: bookmarked ? "var(--accent)" : "inherit" }}
             title="Bookmark"
+            disabled={loading}
           >
             <FiBookmark fill={bookmarked ? "var(--accent)" : "none"} />
           </button>
@@ -175,6 +192,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             onClick={handleViewPdf}
             className="btn btn-sm btn-outline"
             disabled={loading}
+            title="View PDF"
           >
             <FiEye /> View
           </button>
@@ -182,6 +200,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             onClick={handleDownloadPdf}
             className="btn btn-sm btn-primary"
             disabled={loading}
+            title="Download PDF"
           >
             <FiDownload /> {loading ? '...' : 'Download'}
           </button>
