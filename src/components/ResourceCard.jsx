@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, memo, useCallback, useMemo } from "react";
 import api from "../api/api";
 import { FiHeart, FiBookmark, FiDownload, FiEye } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
-const ResourceCard = ({ resource, onUpdate }) => {
+const ResourceCard = memo(({ resource, onUpdate }) => {
   const { isAuthenticated, user } = useAuth();
+  
+  // Local state
   const [liked, setLiked] = useState(
     user?.likedResources?.includes(resource._id) || false
   );
@@ -14,32 +16,46 @@ const ResourceCard = ({ resource, onUpdate }) => {
   const [likesCount, setLikesCount] = useState(resource.likesCount || 0);
   const [loading, setLoading] = useState(false);
 
-  // ✅ FIXED: Get the FULL backend URL for PDF files with proper formatting
-  const getFileUrl = () => {
+  // Memoized file URL
+  const fileUrl = useMemo(() => {
     const baseURL = import.meta.env.VITE_API_URL || 'https://campusshare-backend-1.onrender.com';
-    // Remove trailing slash if present and add /api/files/{id}
     const cleanBaseURL = baseURL.replace(/\/$/, '');
-    // If baseURL already includes /api, don't add it again
     if (cleanBaseURL.endsWith('/api')) {
       return `${cleanBaseURL}/files/${resource.fileId}`;
     }
     return `${cleanBaseURL}/api/files/${resource.fileId}`;
-  };
+  }, [resource.fileId]);
 
-  const handleViewPdf = (e) => {
-    e.stopPropagation();
-    const url = getFileUrl();
-    console.log('📄 Opening PDF URL:', url);
-    window.open(url, '_blank');
-  };
+  // Memoized type color
+  const typeColor = useMemo(() => {
+    const colors = {
+      Notes: "badge-primary",
+      Assignment: "badge-secondary",
+      PYQ: "badge-success",
+      "Previous Year Question": "badge-success",
+      Lab: "badge-warning",
+      "Lab Manual": "badge-warning",
+    };
+    return colors[resource.type] || "badge-primary";
+  }, [resource.type]);
 
-  const handleDownloadPdf = async (e) => {
+  const handleViewPdf = useCallback((e) => {
     e.stopPropagation();
-    const url = getFileUrl();
+    window.open(fileUrl, '_blank');
+  }, [fileUrl]);
+
+  const handleDownloadPdf = useCallback(async (e) => {
+    e.stopPropagation();
     setLoading(true);
     
     try {
-      const response = await fetch(url);
+      // Use fetch with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+      
+      const response = await fetch(fileUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      
       if (!response.ok) throw new Error('Download failed');
       
       const blob = await response.blob();
@@ -53,13 +69,17 @@ const ResourceCard = ({ resource, onUpdate }) => {
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error('Download error:', error);
-      alert('Failed to download file. Please try again.');
+      if (error.name === 'AbortError') {
+        alert('Download timed out. Please try again.');
+      } else {
+        alert('Failed to download file. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [fileUrl, resource.fileName]);
 
-  const handleLike = async (e) => {
+  const handleLike = useCallback(async (e) => {
     e.stopPropagation();
 
     if (!isAuthenticated) {
@@ -67,17 +87,30 @@ const ResourceCard = ({ resource, onUpdate }) => {
       return;
     }
 
+    // Optimistic update
+    const newLiked = !liked;
+    const newLikesCount = newLiked ? likesCount + 1 : likesCount - 1;
+    
+    setLiked(newLiked);
+    setLikesCount(newLikesCount);
+
     try {
       const res = await api.post(`/resources/${resource._id}/like`);
-      setLiked(res.data.liked);
-      setLikesCount(res.data.likesCount);
+      // If server response doesn't match, revert
+      if (res.data.liked !== newLiked) {
+        setLiked(res.data.liked);
+        setLikesCount(res.data.likesCount);
+      }
     } catch (error) {
       console.error("Like error:", error);
+      // Revert on error
+      setLiked(!newLiked);
+      setLikesCount(likesCount);
       alert("Failed to like resource");
     }
-  };
+  }, [isAuthenticated, resource._id, liked, likesCount]);
 
-  const handleBookmark = async (e) => {
+  const handleBookmark = useCallback(async (e) => {
     e.stopPropagation();
 
     if (!isAuthenticated) {
@@ -85,93 +118,78 @@ const ResourceCard = ({ resource, onUpdate }) => {
       return;
     }
 
+    // Optimistic update
+    const newBookmarked = !bookmarked;
+    setBookmarked(newBookmarked);
+
     try {
       const res = await api.post(`/resources/${resource._id}/bookmark`);
-      setBookmarked(res.data.bookmarked);
+      if (res.data.bookmarked !== newBookmarked) {
+        setBookmarked(res.data.bookmarked);
+      }
       if (onUpdate) onUpdate();
     } catch (error) {
       console.error("Bookmark error:", error);
+      // Revert on error
+      setBookmarked(!newBookmarked);
       alert("Failed to bookmark resource");
     }
-  };
-
-  const getTypeColor = (type) => {
-    const colors = {
-      Notes: "badge-primary",
-      Assignment: "badge-secondary",
-      PYQ: "badge-success",
-      "Previous Year Question": "badge-success", // Handle full form
-      Lab: "badge-warning",
-      "Lab Manual": "badge-warning", // Handle full form
-    };
-    return colors[type] || "badge-primary";
-  };
+  }, [isAuthenticated, resource._id, bookmarked, onUpdate]);
 
   return (
     <div className="card">
       <div className="card-header">
         <div className="flex-between">
-          <h3 className="card-title">{resource.title}</h3>
-          <span className={`badge ${getTypeColor(resource.type)}`}>
+          <h3 className="card-title" style={{ fontSize: '1.1rem' }}>{resource.title}</h3>
+          <span className={`badge ${typeColor}`}>
             {resource.type}
           </span>
         </div>
       </div>
 
       <div className="card-body">
-        <p style={{ color: "var(--text-light)", marginBottom: "1rem" }}>
+        <p style={{ 
+          color: "var(--text-light)", 
+          marginBottom: "1rem",
+          fontSize: '0.9rem',
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
           {resource.description}
         </p>
 
-        <div
-          className="flex gap-1"
-          style={{ flexWrap: "wrap", marginBottom: "0.75rem" }}
-        >
-          <span
-            className="badge"
-            style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}
-          >
+        <div className="flex gap-1" style={{ flexWrap: "wrap", marginBottom: "0.75rem" }}>
+          <span className="badge" style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}>
             {resource.branch}
           </span>
-          <span
-            className="badge"
-            style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}
-          >
+          <span className="badge" style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}>
             Sem {resource.semester}
           </span>
-          <span
-            className="badge"
-            style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}
-          >
+          <span className="badge" style={{ background: "var(--bg-light)", color: "var(--text-dark)" }}>
             {resource.subject}
           </span>
         </div>
 
         {resource.uploadedBy && (
-          <p style={{ fontSize: "0.875rem", color: "var(--text-light)" }}>
-            Uploaded by: <strong>{resource.uploadedBy.name}</strong>
-          </p>
-        )}
-
-        {/* Show file size if available */}
-        {resource.fileSize && (
-          <p style={{ fontSize: "0.75rem", color: "var(--text-light)", marginTop: "0.5rem" }}>
-            Size: {(resource.fileSize / (1024 * 1024)).toFixed(2)} MB
+          <p style={{ fontSize: "0.8rem", color: "var(--text-light)" }}>
+            By <strong>{resource.uploadedBy.name}</strong>
           </p>
         )}
       </div>
 
-      <div className="card-footer">
+      <div className="card-footer" style={{ padding: '0.75rem 1rem' }}>
         <div className="flex gap-1">
           <button
             onClick={handleLike}
             className="btn btn-sm btn-icon btn-outline"
-            style={{ color: liked ? "var(--error)" : "inherit" }}
+            style={{ color: liked ? "var(--error)" : "inherit", padding: '0.4rem' }}
             title="Like"
             disabled={loading}
           >
             <FiHeart fill={liked ? "var(--error)" : "none"} />
-            <span style={{ fontSize: "0.875rem", marginLeft: "0.25rem" }}>
+            <span style={{ fontSize: "0.8rem", marginLeft: "0.25rem" }}>
               {likesCount}
             </span>
           </button>
@@ -179,7 +197,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
           <button
             onClick={handleBookmark}
             className="btn btn-sm btn-icon btn-outline"
-            style={{ color: bookmarked ? "var(--accent)" : "inherit" }}
+            style={{ color: bookmarked ? "var(--accent)" : "inherit", padding: '0.4rem' }}
             title="Bookmark"
             disabled={loading}
           >
@@ -192,7 +210,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             onClick={handleViewPdf}
             className="btn btn-sm btn-outline"
             disabled={loading}
-            title="View PDF"
+            style={{ padding: '0.4rem 0.75rem' }}
           >
             <FiEye /> View
           </button>
@@ -200,7 +218,7 @@ const ResourceCard = ({ resource, onUpdate }) => {
             onClick={handleDownloadPdf}
             className="btn btn-sm btn-primary"
             disabled={loading}
-            title="Download PDF"
+            style={{ padding: '0.4rem 0.75rem' }}
           >
             <FiDownload /> {loading ? '...' : 'Download'}
           </button>
@@ -208,6 +226,6 @@ const ResourceCard = ({ resource, onUpdate }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ResourceCard;
