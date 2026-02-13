@@ -2779,79 +2779,7 @@ input[type="file"].form-input::file-selector-button:hover {
     opacity: 0.5;
   }
 }
-/* Add to About Page Styles section */
 
-/* Branch Section */
-.about-branch-section {
-  padding: 2rem 0 4rem;
-  background: white;
-}
-
-.about-branch-card {
-  background: white;
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border);
-}
-
-.about-branch-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 2rem;
-}
-
-.about-branch-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .about-branch-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .about-branch-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.about-branch-item {
-  text-align: center;
-  padding: 1.5rem;
-  background: var(--bg-light);
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-}
-
-.about-branch-item:hover {
-  transform: translateY(-2px);
-  background: white;
-  box-shadow: var(--shadow-md);
-}
-
-.about-branch-name {
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.about-branch-count {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 0.25rem;
-}
-
-.about-branch-label {
-  font-size: 0.8rem;
-  color: var(--text-light);
-}
 
 /* ===================================== */
 /* CONTACT PAGE STYLES - Light Gray Background */

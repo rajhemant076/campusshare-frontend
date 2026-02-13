@@ -110,17 +110,9 @@ const About = () => {
     loading: true,
   });
 
-  const [featuresStats, setFeaturesStats] = useState({
-    branchStats: [],
-    typeStats: [],
-    semesterStats: [],
-    loading: true
-  });
-
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Try to get stats from admin endpoint
         const response = await api.get("/admin/stats");
         if (response.data?.success) {
           const { totalUsers, totalUploads, approvedResources } = response.data.stats;
@@ -133,37 +125,18 @@ const About = () => {
             loading: false,
           });
         } else {
-          // Try features stats endpoint as fallback
-          const featuresResponse = await api.get("/features/stats");
-          if (featuresResponse.data?.success) {
-            const { stats: featureStats } = featuresResponse.data.data;
-            setStats({
-              totalUsers: featureStats.totalUsers || 0,
-              totalResources: featureStats.totalResources || 0,
-              totalDownloads: featureStats.totalDownloads || 0,
-              totalApproved: featureStats.totalApproved || 0,
-              loading: false,
-            });
-            setFeaturesStats({
-              branchStats: featuresResponse.data.data.branchStats || [],
-              typeStats: featuresResponse.data.data.typeStats || [],
-              semesterStats: featuresResponse.data.data.semesterStats || [],
-              loading: false
-            });
-          } else {
-            // No data available, show zeros
-            setStats({
-              totalUsers: 0,
-              totalResources: 0,
-              totalDownloads: 0,
-              totalApproved: 0,
-              loading: false,
-            });
-          }
+          // Use real data from database even if zero
+          setStats({
+            totalUsers: 0,
+            totalResources: 0,
+            totalDownloads: 0,
+            totalApproved: 0,
+            loading: false,
+          });
         }
       } catch (error) {
         console.error("Error fetching stats:", error);
-        // Set to zero on error
+        // Set to zero instead of dummy data
         setStats({
           totalUsers: 0,
           totalResources: 0,
@@ -186,7 +159,7 @@ const About = () => {
     {
       year: "2025",
       title: "Growing Community",
-      description: `Our community now serves ${stats.totalUsers > 0 ? stats.totalUsers.toLocaleString() : 'hundreds of'} students with ${stats.totalResources > 0 ? stats.totalResources.toLocaleString() : 'thousands of'} shared resources.`,
+      description: "Our community continues to grow with students sharing notes, assignments, and study materials.",
       icon: <FiTrendingUp className="w-6 h-6" />,
     },
   ];
@@ -243,13 +216,8 @@ const About = () => {
     { label: "Active Users", value: stats.totalUsers, icon: <FiUsers />, suffix: "+" },
     { label: "Resources", value: stats.totalResources, icon: <FiBookOpen />, suffix: "+" },
     { label: "Downloads", value: stats.totalDownloads, icon: <FiDownload />, suffix: "+" },
-    { label: "Approved Uploads", value: stats.totalApproved, icon: <FiUpload />, suffix: "+" },
+    { label: "Uploads", value: stats.totalApproved, icon: <FiUpload />, suffix: "+" },
   ];
-
-  // Calculate branch distribution for display
-  const topBranches = featuresStats.branchStats
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 4);
 
   return (
     <div className="about-page">
@@ -316,26 +284,6 @@ const About = () => {
           </div>
         </div>
       </section>
-
-      {/* Branch Distribution - Show real data if available */}
-      {topBranches.length > 0 && (
-        <section className="about-branch-section">
-          <div className="container">
-            <div className="about-branch-card">
-              <h3 className="about-branch-title">Resources by Branch</h3>
-              <div className="about-branch-grid">
-                {topBranches.map((branch, index) => (
-                  <div key={index} className="about-branch-item">
-                    <div className="about-branch-name">{branch.branch}</div>
-                    <div className="about-branch-count">{branch.count}</div>
-                    <div className="about-branch-label">resources</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Journey Section */}
       <section className="about-journey-section">
