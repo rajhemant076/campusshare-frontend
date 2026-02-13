@@ -151,12 +151,12 @@ const Navbar = () => {
             /* LINKS FOR NON-AUTHENTICATED USERS */
             <>
               <li>
-                <Link to="/login" className="btn btn-sm btn-secondary" onClick={handleNavClick}>
+                <Link to="/login" className="btn btn-sm btn-secondary" style={{color:"white",padding:"0.5rem 1.5rem"}} onClick={handleNavClick}>
                   Login
                 </Link>
               </li>
               <li>
-                <Link to="/signup" className="btn btn-sm btn-primary" onClick={handleNavClick}>
+                <Link to="/signup" className="btn btn-sm btn-primary" style={{color:"white",padding:"0.5rem 1.5rem"}} onClick={handleNavClick}>
                   Sign Up
                 </Link>
               </li>
