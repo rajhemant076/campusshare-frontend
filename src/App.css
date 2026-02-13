@@ -2176,6 +2176,7 @@ input[type="file"].form-input::file-selector-button:hover {
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  color:black;
 }
 
 @media (max-width: 768px) {
@@ -2193,7 +2194,7 @@ input[type="file"].form-input::file-selector-button:hover {
 
 .about-hero-description {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   max-width: 600px;
   margin: 0 auto;
 }
