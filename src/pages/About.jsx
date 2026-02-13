@@ -274,7 +274,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section
       <section className="about-stats-section">
         <div className="container">
           <div className="about-stats-grid">
@@ -283,7 +283,7 @@ const About = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Journey Section */}
       <section className="about-journey-section">
